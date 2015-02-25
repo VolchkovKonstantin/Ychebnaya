@@ -1,0 +1,10 @@
+apple  grusha orange
+orange grusha
+grusha dina
+Vilka
+apple vilka
+vilka apple orange grusha
+orange dina grusha
+orange
+apple
+geusha
