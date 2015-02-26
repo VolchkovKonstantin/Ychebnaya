@@ -1,0 +1,60 @@
+body {
+    position: fixed;
+    color: #000000;
+    background-color: #aedd94;
+    background: url(images/bg.png);
+    left: 2%;
+    top: 5%
+}
+.Chat {
+    position: fixed;
+    top: 30%;
+    left: 33%;
+    width: 60%;
+    font-family: Oswald;
+    height: 60%;
+    padding-left: 20px;
+    background:palegoldenrod;
+    overflow: scroll;
+}
+.message {
+    position: absolute;
+    left: 5%;
+    bottom: 1%;
+    width: 75%;
+    max-width: 75%;
+}
+.button {
+    position: absolute;
+    left: 85%;
+    bottom: 1%;
+    width: 8%;
+    height: 4%;
+}
+.Online {
+    position: fixed;
+    top: 30%;
+    left: 15%;
+    width: 18%;
+    font-family: Oswald;
+    height: 60%;
+    background:blue;
+}
+.users {
+    position: fixed;
+    top: 35%;
+    left: 16%;
+    width: 16%;
+    height: 53%;
+    background:deeppink;
+    overflow: scroll;
+}
+.Server {
+    background: aqua;
+    width: 10px;
+    height: 10px;
+    left: 1000px;
+}
+.h1 {
+    padding-left: 30%;
+}

@@ -3,19 +3,28 @@
 <head>
     <meta charset="utf-8">
     <title>Authorisation</title>
-    <link rel="stylesheet" href="styles.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-<div id="author">
-    <h1>Hello!</h1></br>
-    <img src="images/users.jpg" align="bottom">
-    <form>
-        <p><strong>YouLogin:</strong>
-        <input maxlength="25" size="40" name="login"></p>
-        <p><strong>Password:</strong>
-        <input type="password" maxlength="25" size="40" name="password"></p>
-        <a href="/Chat/" class="enter">Enter</a>
-        <a href="/Newuser/" class="newUser">New User</a>
+<div>
+<img src="images/users.jpg" align="">
+<form name="Login">
+<p><strong>YoursLogin:</strong></p>
+    <p id="x"></p>
+    <input type="text" class="Login" maxlength="25" size="40" name="Name">
+    <input type="button" value="Enter" onclick="document.getElementById('x').innerHTML=document.forms['Login'].elements['Name'].value">
+</form>
+</div>
+<div class = "Chat">
+    <nav class = "Online">
+<h1 class="h1">Online:</h1>
+        <div class="users">
+        </div>
+    </nav>
+    <p id="y"></p>
+    <form name="Message">
+        <input type="text" class="message" name="msg" >
+        <input type="button" class="button" value="Sent" onclick="document.getElementById('y').innerHTML=document.forms['Message'].elements['msg'].value">
     </form>
     </div>
 </body>
