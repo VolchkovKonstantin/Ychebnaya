@@ -2,22 +2,24 @@ body {
     background-color: #aedd94;
     background: url(images/bg.png);
 }
+
 .Chat {
     position: fixed;
     top: 30%;
     left: 33%;
     width: 60%;
     height: 50%;
-    padding-left: 20px;/*сдвинет поле текста вправо на 20 пикселей*/
+    padding-left: 20px;
     background: moccasin;
     overflow: scroll;
     border: #000000;
     border-style: solid;
     border-width: 1px;
 }
+
 .InputMessage {
     position: fixed;
-    bottom: 86px;
+    bottom: 90px;
     left: 33%;
     width: 61.5%;
     height: 10%;
@@ -26,18 +28,21 @@ body {
     border-style: solid;
     border-width: 1px;
 }
+
 .Message {
     position: absolute;
     bottom: 30%;
     left: 5%;
     width: 65%;
 }
+
 .Button {
     position: absolute;
     bottom: 30%;
     left: 80%;
     width: 90px;
 }
+
 .Online {
     position: fixed;
     top: 30%;
@@ -50,6 +55,7 @@ body {
     border-width: 1px;
     border-right: none;
 }
+
 .Users {
     position: fixed;
     top: 35%;
@@ -59,6 +65,7 @@ body {
     background:moccasin;
     overflow: scroll;
 }
+
 .Server {
     position: fixed;
     bottom: 5%;
