@@ -1,5 +1,6 @@
 <!doctype html>
 <html >
+<!--[if lt IE 9]><script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script><![endif]-->
 <head>
     <meta charset="utf-8">
     <title>Chat</title>
@@ -23,7 +24,7 @@
     </nav>
     <form name="FormMsg">
         <p id="y"></p>
-        <footer class = "InputMessage">
+        <div class = "InputMessage">
             <input type="text" class="Message" name="msg" >
             <input type="button" class="Button" value="Sent" onclick="document.getElementById('y').innerHTML=document.forms['FormMsg'].elements['msg'].value">
             <p style="color: yellowgreen">
@@ -31,7 +32,7 @@
                 <input type="checkbox"  value="change"> Change
                 <input type="checkbox"  value="delete"> Delete
             </p>
-        </footer>
+        </div>
     </form>
 </div>
 <div class="Server">
