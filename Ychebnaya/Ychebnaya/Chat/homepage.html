@@ -1,32 +1,32 @@
 <!doctype html>
 <html >
-<!--[if lt IE 9]><script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script><![endif]-->
 <head>
     <meta charset="utf-8">
     <title>Chat</title>
     <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="dynamics.js"></script>
 </head>
 <body>
-<div>
+<div class="authorization">
         <img src="images/users.jpg">
-    <form name="Login">
+    <form name="login">
         <p><strong>Enter Login:</strong></p>
-        <p id="x"></p>
-        <input type="text" class="Login" maxlength="25" size="40" name="Name">
-        <input type="button" value="Enter" onclick="document.getElementById('x').innerHTML=document.forms['Login'].elements['Name'].value">
+        <p id="nameLogin"></p>
+        <input type="text" class="message" maxlength="25" size="40" name="username">
+        <input type="button" value="Enter" onclick="getText()">
     </form>
 </div>
-<div class = "Chat">
-    <nav class = "Online">
-            <h1 style="color: greenyellow; text-align: center ">Online:</h1>
-        <div class="Users">
+<div class = "chat">
+    <div class = "online">
+            <h1 style="color: greenyellow;">Online:</h1>
+        <div class="users">
         </div>
-    </nav>
-    <form name="FormMsg">
-        <p id="y"></p>
-        <div class = "InputMessage">
-            <input type="text" class="Message" name="msg" >
-            <input type="button" class="Button" value="Sent" onclick="document.getElementById('y').innerHTML=document.forms['FormMsg'].elements['msg'].value">
+    </div>
+    <form name="formMsg">
+        <p id="text"></p>
+        <div class = "inputMessage">
+            <input type="text" class="message" name="msg" >
+            <input type="button" class="button" value="Sent" onclick="getLogin()">
             <p style="color: yellowgreen">
                 <input type="checkbox" checked value="new"> New
                 <input type="checkbox"  value="change"> Change
@@ -35,7 +35,7 @@
         </div>
     </form>
 </div>
-<div class="Server">
+<div class="server">
     <h2>Server:<img src="images/greenButton.png"></h2>
 </div>
 </body>

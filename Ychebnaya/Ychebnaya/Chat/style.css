@@ -3,7 +3,12 @@ body {
     background: url(images/bg.png);
 }
 
-.Chat {
+.authorization {
+    width: 40%;
+    height: 60%;
+}
+
+.chat {
     position: fixed;
     top: 30%;
     left: 33%;
@@ -17,11 +22,11 @@ body {
     border-width: 1px;
 }
 
-.InputMessage {
+.inputMessage {
     position: fixed;
     bottom: 9.8%;
     left: 33.05%;
-    width: 61.6%;
+    width: 61.7%;
     height: 9.8%;
     background: #000000;
     border: yellowgreen;
@@ -29,21 +34,15 @@ body {
     border-width: 1px;
 }
 
-.Message {
-    position: absolute;
-    bottom: 30%;
-    left: 5%;
+.message {
     width: 65%;
 }
 
-.Button {
-    position: absolute;
-    bottom: 30%;
-    left: 80%;
+.button {
     width: 90px;
 }
 
-.Online {
+.online {
     position: fixed;
     top: 30%;
     left: 15%;
@@ -55,17 +54,13 @@ body {
     border-width: 1px;
 }
 
-.Users {
-    position: fixed;
-    top: 35%;
-    left: 16%;
-    width: 16%;
-    height: 53%;
+.users {
+    height: 65%;
     background:moccasin;
     overflow: scroll;
 }
 
-.Server {
+.server {
     position: fixed;
     bottom: 5%;
     width: 80px;
