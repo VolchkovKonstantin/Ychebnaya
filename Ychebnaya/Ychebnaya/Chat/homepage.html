@@ -1,42 +1,46 @@
 <!doctype html>
 <html >
 <head>
-    <meta charset="utf-8">
+    <meta charset = "utf-8">
     <title>Chat</title>
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <script src="dynamics.js"></script>
+    <link rel = "stylesheet" href = "style.css" type = "text/css">
+    <script src = "dynamics.js"></script>
 </head>
-<body>
-<div class="authorization">
-        <img src="images/users.jpg">
-    <form name="login">
+<body onload = "run();">
+<div class = "authorization">
+        <img src = "images/users.jpg">
+    <form name = "login">
         <p><strong>Enter Login:</strong></p>
-        <p id="nameLogin"></p>
-        <input type="text" class="message" maxlength="25" size="40" name="username">
-        <input type="button" value="Enter" onclick="getText()">
+        <p id = "nameLogin"></p>
+        <input type = "text" class = "message" maxlength = "25" size = "40" name = "username">
+        <input type = "button" value = "Enter" onclick = "getText()">
     </form>
 </div>
-<div class = "chat">
+<div class = "shell">
     <div class = "online">
-            <h1 style="color: greenyellow;">Online:</h1>
-        <div class="users">
+            <h1 class = "green">Online:</h1>
+        <div class = "users">
         </div>
     </div>
-    <form name="formMsg">
-        <p id="text"></p>
-        <div class = "inputMessage">
-            <input type="text" class="message" name="msg" >
-            <input type="button" class="button" value="Sent" onclick="getLogin()">
-            <p style="color: yellowgreen">
-                <input type="checkbox" checked value="new"> New
-                <input type="checkbox"  value="change"> Change
-                <input type="checkbox"  value="delete"> Delete
-            </p>
+    <div class = "chat">
+        <div class = "items">
         </div>
-    </form>
+        </div>
+        <div class = "inputMessage">
+            <form name = "text">
+            <input id = "newMessage" type = "text" class = "message" name = "msg"
+                   value = "Для удаления и изменения сообщений клацнуть на delete или change и клацнуть на желаемое сообощение">
+            <input type = "button" class = "button" value = "Sent">
+            <p class = "green">
+                <label><input id = "clickNew" type = "radio"  checked name = "radio"> New</label>
+                <label><input id = "clickChange" type = "radio"  name = "radio"> Change</label>
+                    <label><input id = "clickDelete" type = "radio"  name = "radio"> Delete</label>
+            </p>
+            </form>
+        </div>
 </div>
-<div class="server">
-    <h2>Server:<img src="images/greenButton.png"></h2>
+<div class = "server">
+    <h2>Server:<img src = "images/greenButton.png"></h2>
 </div>
 </body>
 </html>
