@@ -19,26 +19,29 @@ function buttonClick() {
     var radioChange = document.getElementById('clickChange');
     if (radioNew.checked || radioChange.checked) {
         var message = document.getElementById('newMessage');
+        if(number == 0) {
         var user = document.getElementById('nameLogin');
         user.value = document.getElementById('nameLogin').innerHTML;
         if (!message.value)
             return;
         var item = createDiv(message.value, user.value);
         var items = document.getElementsByClassName('items')[0];
-        if(number == 0) {
             items.appendChild(item);
         }
         else {
-            items.insertBefore(item,items.childNodes[number]);
+            if (!message.value)
+                return;
+            var items = document.getElementsByClassName('items')[0];
+            items.childNodes[number].appendChild(document.createTextNode(message.value));
         }
-        number=0;
+        number = 0;
         message.value = '';
     }
 }
 function textClick(item) {
     var radioDelete = document.getElementById('clickDelete');
     if (radioDelete.checked && number == 0) {
-        deletemessage(item);
+        deletediv(item);
     }
     delete radioDelete;
     var radioChange = document.getElementById('clickChange');
@@ -49,23 +52,35 @@ function textClick(item) {
     }
     delete radioChange;
 }
-function deletemessage(item) {
+function deletediv(item) {
     var items = document.getElementsByClassName('items')[0];
     var element, i=0;
     for(i = 0; i < items.childNodes.length; i++)
-        if(items.childNodes[i]===item) {
+        if(items.childNodes[i] === item) {
             element = i;
             number = element;
             break;
         }
     items.removeChild(items.childNodes[element]);
 }
+function deletemessage(item) {
+    var items = document.getElementsByClassName('items')[0];
+    var element, i=0;
+    for(i = 0; i < items.childNodes.length; i++)
+        if(items.childNodes[i] === item) {
+            element = i;
+            number = element;
+            break;
+        }
+    items.childNodes[element].removeChild(items.childNodes[element].childNodes[2]);
+}
 function createDiv(text, user)
 {
+    var message = document.createTextNode(text);
     var newDiv = document.createElement('div');
     newDiv.classList.add('item');
     newDiv.appendChild(document.createTextNode(user+':'));
     newDiv.appendChild(document.createElement('br'));
-    newDiv.appendChild(document.createTextNode(text));
+    newDiv.appendChild(message);
     return newDiv;
 }
