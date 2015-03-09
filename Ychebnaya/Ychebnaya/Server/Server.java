@@ -43,7 +43,7 @@ public class Server implements HttpHandler {
                 System.out.println("Get list of messages: GET http://" + serverHost + ":" + port + "/chat?token={token}");
                 loggin(whatIsTime(),"method get");
                 System.out.println("Send message: POST http://" + serverHost + ":" + port + "/chat provide body json in format {\"message\" : \"{message}\"} ");
-
+                loggin(whatIsTime(),"method post");
                 server.createContext("/chat", new Server());
                 server.setExecutor(null);
                 server.start();
@@ -98,6 +98,7 @@ public class Server implements HttpHandler {
     private void sendResponse(HttpExchange httpExchange, String response) throws IOException {
         httpExchange.sendResponseHeaders(200, response.length());
         OutputStream os = httpExchange.getResponseBody();
+        loggin(whatIsTime(),"request send");
         os.write(response.getBytes());
         os.flush();
         os.close();

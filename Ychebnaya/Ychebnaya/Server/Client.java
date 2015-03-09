@@ -21,6 +21,7 @@ public class Client implements Runnable {
     public Client(String host, Integer port) {
         this.host = host;
         this.port = port;
+        loggin(whatIsTime(),"request begin");
     }
 
     public static void loggin(String date, String event) {
@@ -70,6 +71,7 @@ public class Client implements Runnable {
                 System.out.println(o);
                 list.add(o.toString());
             }
+            loggin(whatIsTime(),"history size"+list.size());
         } catch (IOException e) {
             System.err.println("ERROR: " + e.getMessage());
         } catch (ParseException e) {
@@ -130,7 +132,6 @@ public class Client implements Runnable {
     @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
-        loggin(whatIsTime(),"request begin");
         while (true) {
             String message = scanner.nextLine();
             sendMessage(message);
