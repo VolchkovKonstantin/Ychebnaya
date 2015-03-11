@@ -1,43 +1,43 @@
 <!doctype html>
-<html >
+<html>
 <head>
-    <meta charset = "utf-8">
+    <meta charset="utf-8">
     <title>Chat</title>
-    <link rel = "stylesheet" href = "style.css" type = "text/css">
-    <script src = "dynamics.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="dynamics.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body onload = "run();">
-<div class = "authorization container">
+<body onload="run();">
+<div class="container">
     <div class="row">
-    <img src = "images/users.jpg" class="span2">
-    <div class = "server span1">
-        <h4>Server:<img src = "images/greenButton.png"></h4>
-    </div>
+        <img src="images/users.jpg" class="span2">
+        <div class="server span1">
+            <h4>Server:<img src="images/greenButton.png"></h4>
         </div>
-        <p class ="lead">Enter Login:</p>
-        <p id = "nameLogin"></p>
-    <div class = "form-inline">
-        <input id = "Login" type = "text" class = "text input-xlarge" name = "username" onkeydown="if(event.keyCode==13){PickLogin()};">
-        <input type = "button" class ="btn btn-small btn-success" value = "Enter">
     </div>
-        <div class = "shell">
-        <div class = "online">
-            <h1 class = "green">Online:</h1>
-            <div class = "users">
+    <p class="lead">Enter Login:</p>
+    <p id="nameLogin"></p>
+    <div class="form-inline">
+        <input id="Login" type="text" class="input-xlarge" onkeydown="if(event.keyCode==13){PickLogin()};">
+        <input type="button" class="btn btn-small btn-success" value="Enter">
+    </div>
+    <div class="shell">
+        <div class="online">
+            <h1 class="green">Online:</h1>
+            <div class="users">
             </div>
         </div>
-        <div class = "chat">
-            <div class = "items">
+        <div class="chat">
+            <div class="items">
             </div>
         </div>
-        <div class = "inputMessage">
-            <div class = "form-inline">
-                <input id = "newMessage" type = "text" class = "text input-xxlarge message" name = "msg" onkeydown="if(event.keyCode==13){buttonClick()};">
-                <input type = "button" class = "btn btn-info " value = "Sent">
-                </div>
+        <div class="inputMessage">
+            <div class="form-inline">
+                <input id="newMessage" type="text" class="input-xxlarge" onkeydown="if(event.keyCode==13){buttonClick()};">
+                <input type="button" class="btn btn-info " value="Sent">
+            </div>
         </div>
+    </div>
 </div>
-    </div>
 </body>
 </html>
