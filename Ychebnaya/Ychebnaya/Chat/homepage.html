@@ -15,13 +15,13 @@
         <h4>Server:<img src = "images/greenButton.png"></h4>
     </div>
         </div>
-    <form name = "login">
-        <h4><strong>Enter Login:</strong></h4>
+        <p class ="lead">Enter Login:</p>
         <p id = "nameLogin"></p>
-        <input class = "text input-xlarge" name = "username" >
-        <input type = "button" class ="btn btn-small btn-success" value = "Enter" onclick = "getText()">
-    </form>
-    <div class = "shell">
+    <div class = "form-inline">
+        <input id = "Login" type = "text" class = "text input-xlarge" name = "username" onkeydown="if(event.keyCode==13){PickLogin()};">
+        <input type = "button" class ="btn btn-small btn-success" value = "Enter">
+    </div>
+        <div class = "shell">
         <div class = "online">
             <h1 class = "green">Online:</h1>
             <div class = "users">
@@ -32,14 +32,12 @@
             </div>
         </div>
         <div class = "inputMessage">
-            <form name = "text">
-                <row>
-                <input id = "newMessage" type = "text" class = "text input-xxlarge message" name = "msg" >
-                <input type = "button" class = "btn btn-info pull-right button " value = "Sent">
-                    </row>
-            </form>
+            <div class = "form-inline">
+                <input id = "newMessage" type = "text" class = "text input-xxlarge message" name = "msg" onkeydown="if(event.keyCode==13){buttonClick()};">
+                <input type = "button" class = "btn btn-info " value = "Sent">
+                </div>
         </div>
-    </div>
 </div>
+    </div>
 </body>
 </html>

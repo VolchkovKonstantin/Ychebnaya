@@ -1,15 +1,14 @@
-function getText() {
-    document.getElementById('nameLogin').innerHTML = document.forms['login'].elements['username'].value;
-}
 var number = 0;
 function run() {
-var Container = document.getElementsByClassName('shell')[0];
+var Container = document.getElementsByClassName('authorization')[0];
     Container.addEventListener('click', delegateEvent);
-    Container.addEventListener('over',delegateEvent);
 }
 function delegateEvent(event) {
-if(event.type == 'click' && event.target.classList.contains('button')) {
+if(event.type == 'click'&& event.target.classList.contains('btn-info')) {
         buttonClick();
+    }
+    if(event.type == 'click'&& event.target.classList.contains('btn-success')) {
+        PickLogin();
     }
     if(event.type == 'click' && event.target.classList.contains('btn-warning')) {
         changeClick(event.target.parentNode);
@@ -26,6 +25,11 @@ function mouseOut()
 {
     document.getElementById("button").src="../images/button1.png";
 }*/
+function PickLogin() {
+    var login = document.getElementById('Login');
+    document.getElementById('nameLogin').innerHTML=login.value;
+    login.value = '';
+}
 function buttonClick() {
     /*var radioNew = document.getElementById('clickNew');
     var radioChange = document.getElementById('clickChange');*/
@@ -66,8 +70,8 @@ function deleteClick (item) {
     items.removeChild(items.childNodes[i]);
 }
 function changeClick (item) {
-    var b = item.childNodes[4].textContent;
-    document.forms['text'].elements['msg'].value = b;
+    var b = item.childNodes[2].textContent;
+    document.getElementById('newMessage').value = b;
     deletemessage(item);
 }
 function deletemessage(item) {
@@ -79,27 +83,28 @@ function deletemessage(item) {
             number = i;
             break;
         }
-    items.childNodes[element].removeChild(items.childNodes[element].childNodes[4]);
+    items.childNodes[element].removeChild(items.childNodes[element].childNodes[2]);
 }
 function createDiv(text, user)
 {
     var message = document.createTextNode(text);
     var newDiv = document.createElement('div');
     newDiv.className =  'message';
+    newDiv.appendChild(document.createTextNode(user+':'));
+    newDiv.appendChild(document.createElement('br'));
+    newDiv.appendChild(message);
+    newDiv.appendChild(document.createElement('br'));
     var d = document.createElement('input');
-    d.className= 'btn pull-right btn-danger';
+    d.className= 'btn  btn-danger btn-mini';
     d.type = 'button';
     d.name = "delete";
     d.value = "delete";
     newDiv.appendChild(d);
-    var d = document.createElement('input');
-    d.className = 'btn btn-warning pull-right';
+    d = document.createElement('input');
+    d.className = 'btn btn-warning btn-mini';
     d.name = "change";
     d.value = "change";
     d.type = "button";
     newDiv.appendChild(d);
-    newDiv.appendChild(document.createTextNode(user+':'));
-    newDiv.appendChild(document.createElement('br'));
-    newDiv.appendChild(message);
     return newDiv;
 }
