@@ -1,7 +1,22 @@
 var number = 0;
+var uniqueId = function() {
+    var date=Date.now();
+    var random = Math.random() * Math.random();
+    return Math.floor(date * random).toString();
+};
+var theTask = function(user,message) {
+    return {
+        login:user,
+        message:message,
+        id: uniqueId()
+    };
+};
+var taskList = [];
 function run() {
     var Container = document.getElementsByClassName('container')[0];
     Container.addEventListener('click', delegateEvent);
+    allTask = restore();
+    createAllTask(allTask);
 }
 function delegateEvent(event) {
     if (event.type == 'click' && event.target.classList.contains('btn-info')) {
@@ -16,6 +31,25 @@ function delegateEvent(event) {
     if (event.type == 'click' && event.target.classList.contains('btn-danger')) {
         deleteClick(event.target.parentNode);
     }
+}
+function createAllTask(allTask) {
+    for(var i=0;i< allTask.length;i++)
+    addTodo(allTask[i]);
+}
+function store(listToSave) {
+    if(typeof(Storage) == "undefined") {
+        alert('localStorage is not accessible');
+        return;
+    }
+    localStorage.setItem("Chat", JSON.stringify(listToSave));
+}
+function restore() {
+    if(typeof(Storage) == "undefined") {
+        alert('localStorage is not accessible');
+        return;
+    }
+    var item = localStorage.getItem("Chat");
+    return item && JSON.parse(item);
 }
 function PickLogin() {
     var login = document.getElementById('Login');
@@ -32,16 +66,41 @@ function buttonClick() {
     }
     if (!message.value)
         return;
-    var item = createDiv(message.value, user.value);
-    var items = document.getElementsByClassName('items')[0];
-    if (number) {
-        items.childNodes[number].insertBefore(document.createTextNode(message.value), items.childNodes[number].childNodes[2]);
-    }
-    else {
-        items.appendChild(item);
-    }
-    number = 0;
+    var newTask = theTask(user.value,message.value);
+    addTodo(newTask);
     message.value = '';
+    store(taskList);
+
+    /*var item = createDiv(message.value, user.value);
+     var items = document.getElementsByClassName('items')[0];
+     if (number) {
+     items.childNodes[number].insertBefore(document.createTextNode(message.value), items.childNodes[number].childNodes[2]);
+     }
+     else {
+     items.appendChild(item);
+     }
+     number = 0;
+     */
+}
+function addTodo(task) {
+    var item = createItem(task);//createDiv(message.value, user.value);
+    var items = document.getElementsByClassName('items')[0];
+    taskList.push(task);
+    items.appendChild(item);
+}
+function createItem(task) {
+    var temp = document.createElement('div');
+    var htmlAsText = '<div class="item" data-task-id="индефикатор">'+
+            'Логин<br>Сообщение<br><input class="btn  btn-danger btn-mini" type="button" value="delete">'+
+        '<input class="btn btn-warning btn-mini" type="button" value="change"></div>';
+    temp.innerHTML = htmlAsText;
+    updateItem(temp.firstChild, task);
+    return temp.firstChild;
+}
+function updateItem(divItem,task) {
+    divItem.setAttribute('data-task-id',task.id);
+    divItem.childNodes[0].textContent = task.login;
+    divItem.childNodes[2].textContent = task.message;
 }
 function deleteClick(item) {
     var items = document.getElementsByClassName('items')[0];
@@ -52,7 +111,11 @@ function deleteClick(item) {
         }
     if (i < number)
         number--;
+    if (i == number)
+    number = 0;
     items.removeChild(items.childNodes[i]);
+    taskList.splice(i-1,1);
+    store(taskList);
 }
 function changeClick(item) {
     var b = item.childNodes[2].textContent;
@@ -69,24 +132,4 @@ function deletemessage(item) {
             break;
         }
     items.childNodes[element].removeChild(items.childNodes[element].childNodes[2]);
-}
-function createDiv(text, user) {
-    var message = document.createTextNode(text);
-    var newDiv = document.createElement('div');
-    newDiv.className = 'message';
-    newDiv.appendChild(document.createTextNode(user + ':'));
-    newDiv.appendChild(document.createElement('br'));
-    newDiv.appendChild(message);
-    newDiv.appendChild(document.createElement('br'));
-    var btn = document.createElement('input');
-    btn.className = 'btn  btn-danger btn-mini';
-    btn.type = 'button';
-    btn.value = "delete";
-    newDiv.appendChild(btn);
-    btn = document.createElement('input');
-    btn.className = 'btn btn-warning btn-mini';
-    btn.value = "change";
-    btn.type = "button";
-    newDiv.appendChild(btn);
-    return newDiv;
 }
