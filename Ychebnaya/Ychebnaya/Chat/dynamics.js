@@ -27,16 +27,20 @@ function delegateEvent(event) {
     if (event.type == 'click' && event.target.classList.contains('btn-info')) {
         buttonClick();
     }
-    if (event.type == 'click' && event.target.classList.contains('btn-success')) {
-        PickLogin();
+    if (document.getElementById('newMessage').value != "") {
+        alert('make changes , and then enter');
+        return;
     }
-    if (event.type == 'click' && event.target.classList.contains('btn-warning')) {
-        changeClick(event.target.parentNode);
+        if (event.type == 'click' && event.target.classList.contains('btn-success')) {
+            PickLogin();
+        }
+        if (event.type == 'click' && event.target.classList.contains('btn-warning')) {
+            changeClick(event.target.parentNode);
+        }
+        if (event.type == 'click' && event.target.classList.contains('btn-danger')) {
+            deleteClick(event.target.parentNode);
+        }
     }
-    if (event.type == 'click' && event.target.classList.contains('btn-danger')) {
-        deleteClick(event.target.parentNode);
-    }
-}
 function createAllTask(allTask) {
     for(var i=0;i< allTask.length;i++)
     addTodo(allTask[i]);
