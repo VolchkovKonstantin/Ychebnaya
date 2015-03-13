@@ -16,15 +16,16 @@
         </div>
     </div>
     <p class="lead">Enter Login:</p>
-    <p id="nameLogin"></p>
+    <p id="nameLogin" class ="fat"></p>
     <div class="form-inline">
         <input id="Login" type="text" class="input-xlarge" onkeydown="if(event.keyCode==13){PickLogin()};">
         <input type="button" class="btn btn-small btn-success" value="Enter">
     </div>
     <div class="shell">
         <div class="online">
-            <h1 class="green">Online:</h1>
+            <h1 class="green center">Online:</h1>
             <div class="users">
+                <p id="onlineUser" class = "center fat"></p>
             </div>
         </div>
         <div class="chat">
@@ -39,5 +40,7 @@
         </div>
     </div>
 </div>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

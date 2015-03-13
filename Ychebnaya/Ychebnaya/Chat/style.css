@@ -57,3 +57,9 @@ body {
 .server {
     width: 80px;
 }
+.center {
+    text-align: center;
+}
+.fat {
+    font-weight: bold;
+}

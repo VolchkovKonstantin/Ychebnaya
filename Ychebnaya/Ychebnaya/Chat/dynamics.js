@@ -15,7 +15,12 @@ var taskList = [];
 function run() {
     var Container = document.getElementsByClassName('container')[0];
     Container.addEventListener('click', delegateEvent);
-    allTask = restore();
+    allTask = restoreChat();
+    var login = restoreLogin();
+    if (login != "") {
+        document.getElementById('nameLogin').innerHTML = login;
+        document.getElementById('onlineUser').innerHTML = login;
+    }
     createAllTask(allTask);
 }
 function delegateEvent(event) {
@@ -36,14 +41,21 @@ function createAllTask(allTask) {
     for(var i=0;i< allTask.length;i++)
     addTodo(allTask[i]);
 }
-function store(listToSave) {
+function storeChat(listToSave) {
     if(typeof(Storage) == "undefined") {
         alert('localStorage is not accessible');
         return;
     }
     localStorage.setItem("Chat", JSON.stringify(listToSave));
 }
-function restore() {
+function storeLogin(login) {
+    if(typeof(Storage) == "undefined") {
+        alert('localStorage is not accessible');
+        return;
+    }
+    localStorage.setItem("Login", JSON.stringify(login));
+}
+function restoreChat() {
     if(typeof(Storage) == "undefined") {
         alert('localStorage is not accessible');
         return;
@@ -51,9 +63,19 @@ function restore() {
     var item = localStorage.getItem("Chat");
     return item && JSON.parse(item);
 }
+function restoreLogin() {
+    if(typeof(Storage) == "undefined") {
+        alert('localStorage is not accessible');
+        return;
+    }
+    var item = localStorage.getItem("Login");
+    return item && JSON.parse(item);
+}
 function PickLogin() {
     var login = document.getElementById('Login');
     document.getElementById('nameLogin').innerHTML = login.value;
+    document.getElementById('onlineUser').innerHTML = login.value;
+    storeLogin(login.value);
     login.value = '';
 }
 function buttonClick() {
@@ -69,24 +91,20 @@ function buttonClick() {
     var newTask = theTask(user.value,message.value);
     addTodo(newTask);
     message.value = '';
-    store(taskList);
-
-    /*var item = createDiv(message.value, user.value);
-     var items = document.getElementsByClassName('items')[0];
-     if (number) {
-     items.childNodes[number].insertBefore(document.createTextNode(message.value), items.childNodes[number].childNodes[2]);
-     }
-     else {
-     items.appendChild(item);
-     }
-     number = 0;
-     */
+    storeChat(taskList);
 }
 function addTodo(task) {
-    var item = createItem(task);//createDiv(message.value, user.value);
+    var item = createItem(task);
     var items = document.getElementsByClassName('items')[0];
-    taskList.push(task);
-    items.appendChild(item);
+    if (number) {
+        items.childNodes[number].childNodes[2].data = task.message;
+        taskList[number-1].message = task.message;
+        number = 0;
+    }
+    else {
+        taskList.push(task);
+        items.appendChild(item);
+    }
 }
 function createItem(task) {
     var temp = document.createElement('div');
@@ -103,6 +121,10 @@ function updateItem(divItem,task) {
     divItem.childNodes[2].textContent = task.message;
 }
 function deleteClick(item) {
+    if (document.getElementById('nameLogin').innerHTML !== item.childNodes[0].textContent) {
+        alert("You can't delete message's other users");
+        return
+    }
     var items = document.getElementsByClassName('items')[0];
     var i = 0;
     for (i = 0; i < items.childNodes.length; i++)
@@ -115,9 +137,13 @@ function deleteClick(item) {
     number = 0;
     items.removeChild(items.childNodes[i]);
     taskList.splice(i-1,1);
-    store(taskList);
+    storeChat(taskList);
 }
 function changeClick(item) {
+    if (document.getElementById('nameLogin').innerHTML !== item.childNodes[0].textContent) {
+        alert("You can't change message's other users");
+        return;
+    }
     var b = item.childNodes[2].textContent;
     document.getElementById('newMessage').value = b;
     deletemessage(item);
@@ -131,5 +157,5 @@ function deletemessage(item) {
             number = i;
             break;
         }
-    items.childNodes[element].removeChild(items.childNodes[element].childNodes[2]);
+    items.childNodes[element].childNodes[2].textContent ='';
 }
