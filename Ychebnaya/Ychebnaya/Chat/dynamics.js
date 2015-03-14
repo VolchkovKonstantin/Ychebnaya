@@ -1,4 +1,4 @@
-var number = 0;
+var number = -1;
 var uniqueId = function() {
     var date=Date.now();
     var random = Math.random() * Math.random();
@@ -113,10 +113,10 @@ function buttonClick() {
 function addTodo(task) {
     var item = createItem(task);
     var items = document.getElementsByClassName('items')[0];
-    if (number) {
+    if (number != -1) {
         items.childNodes[number].childNodes[2].data = task.message;
         taskList[number].message = task.message;
-        number = 0;
+        number = -1;
     }
     else {
         taskList.push(task);
