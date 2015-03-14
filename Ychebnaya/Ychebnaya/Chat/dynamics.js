@@ -28,9 +28,22 @@ function delegateEvent(event) {
         buttonClick();
     }
     if (document.getElementById('newMessage').value != "") {
+        if (event.type == 'click' && event.target.classList.contains('input')) {
+            //Чтобы не выдавало ошибку при нажатии на input
+            return;
+        }
+        if (document.getElementById('nameLogin').innerHTML =="") {
+            // Если вы ввели текст забыли про логин то сможете залогиниться
+            if (event.type == 'click' && event.target.classList.contains('btn-success')) {
+                PickLogin();
+            }
+            return;
+        }
         alert('make changes , and then enter');
+        document.getElementById('newMessage').focus();
         return;
     }
+    else {
         if (event.type == 'click' && event.target.classList.contains('btn-success')) {
             PickLogin();
         }
@@ -41,6 +54,7 @@ function delegateEvent(event) {
             deleteClick(event.target.parentNode);
         }
     }
+}
 function createAllTask(allTask) {
     for(var i=0;i< allTask.length;i++)
     addTodo(allTask[i]);
@@ -83,18 +97,17 @@ function PickLogin() {
     login.value = '';
 }
 function buttonClick() {
-    var message = document.getElementById('newMessage');
-    var user = document.getElementById('nameLogin');
-    user.value = document.getElementById('nameLogin').innerHTML;
-    if (user.value.localeCompare("") == 0) {
+    var message = document.getElementById('newMessage').value;
+    var user = document.getElementById('nameLogin').innerHTML;
+    if (user.localeCompare("") == 0) {
         alert("Заполни логин!!!")
         return;
     }
-    if (!message.value)
+    if (!message)
         return;
-    var newTask = theTask(user.value,message.value);
+    var newTask = theTask(user,message);
     addTodo(newTask);
-    message.value = '';
+    document.getElementById('newMessage').value ='';
     storeChat(taskList);
 }
 function addTodo(task) {
@@ -102,7 +115,7 @@ function addTodo(task) {
     var items = document.getElementsByClassName('items')[0];
     if (number) {
         items.childNodes[number].childNodes[2].data = task.message;
-        taskList[number-1].message = task.message;
+        taskList[number].message = task.message;
         number = 0;
     }
     else {
@@ -127,20 +140,17 @@ function updateItem(divItem,task) {
 function deleteClick(item) {
     if (document.getElementById('nameLogin').innerHTML !== item.childNodes[0].textContent) {
         alert("You can't delete message's other users");
-        return
+        return;
     }
     var items = document.getElementsByClassName('items')[0];
-    var i = 0;
-    for (i = 0; i < items.childNodes.length; i++)
-        if (items.childNodes[i] === item) {
+    var id = item.attributes['data-task-id'].value;
+    for(var i = 0; i < taskList.length; i++) {
+        if (taskList[i].id == id) {
             break;
         }
-    if (i < number)
-        number--;
-    if (i == number)
-    number = 0;
+    }
     items.removeChild(items.childNodes[i]);
-    taskList.splice(i-1,1);
+    taskList.splice(i,1);
     storeChat(taskList);
 }
 function changeClick(item) {
@@ -151,15 +161,16 @@ function changeClick(item) {
     var b = item.childNodes[2].textContent;
     document.getElementById('newMessage').value = b;
     deletemessage(item);
+    document.getElementById('newMessage').focus();
 }
 function deletemessage(item) {
     var items = document.getElementsByClassName('items')[0];
-    var element, i = 0;
-    for (i = 0; i < items.childNodes.length; i++)
-        if (items.childNodes[i] === item) {
-            element = i;
+    var id = item.attributes['data-task-id'].value;
+    for(var i = 0; i < taskList.length; i++) {
+        if (taskList[i].id == id) {
             number = i;
             break;
         }
-    items.childNodes[element].childNodes[2].textContent ='';
+    }
+    items.childNodes[number].childNodes[2].textContent ='';
 }
