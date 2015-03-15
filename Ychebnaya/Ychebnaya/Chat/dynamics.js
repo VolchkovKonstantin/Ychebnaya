@@ -32,8 +32,8 @@ function delegateEvent(event) {
             //Чтобы не выдавало ошибку при нажатии на input
             return;
         }
-        if (document.getElementById('nameLogin').innerHTML =="") {
-            // Если вы ввели текст забыли про логин то сможете залогиниться
+        if (number == -1) {
+            // Если вы ввели текст то сможете залогиниться
             if (event.type == 'click' && event.target.classList.contains('btn-success')) {
                 PickLogin();
             }
