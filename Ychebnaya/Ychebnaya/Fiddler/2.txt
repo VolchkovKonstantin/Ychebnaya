@@ -1,0 +1,10 @@
+GET http://localhost:999/chat?token=TN34EN HTTP/1.1
+User-Agent: Fiddler
+Host: localhost:999
+
+
+HTTP/1.1 200 OK
+Date: Tue, 17 Mar 2015 21:36:26 GMT
+Content-length: 42
+
+{"messages":["nucvklnu"],"token":"TN19EN"}
