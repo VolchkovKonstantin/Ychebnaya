@@ -5,41 +5,40 @@
     <title>Chat</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script src="dynamics.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body onload="run();">
 <div class="container">
     <div class="row">
         <img src="images/users.jpg" class="span2">
-        <div class="server span1">
+        <div class="isServerON span1">
             <h4>Server:<img src="images/greenButton.png"></h4>
         </div>
     </div>
     <p class="lead">Enter Login:</p>
-    <p id="nameLogin" class ="fat"></p>
+    <p id="nameLogin" class="fat"></p>
     <div class="form-inline">
-        <input id="Login" type="text" class="input input-xlarge" onkeydown="if(event.keyCode==13){PickLogin()};">
+        <input id="inputLogin" type="text" class="input input-xlarge" onkeydown="if(event.keyCode==13){PickLogin()};">
         <input type="button" class="btn btn-small btn-success" value="Enter">
     </div>
     <div class="shell">
         <div class="online">
             <h1 class="green center">Online:</h1>
             <div class="users">
-                <p id="onlineUser" class = "center fat"></p>
+                <p id="onlineUser" class="center fat"></p>
             </div>
         </div>
         <div class="chat">
             <div class="items"></div>
         </div>
-        <div class="inputMessage">
+        <div class="panelMessage">
             <div class="form-inline">
-                <input id="newMessage" type="text" class="input input-xxlarge" onkeydown="if(event.keyCode==13){buttonClick()};">
+                <input id="inputMessage" type="text" class="input input-xxlarge"
+                       onkeydown="if(event.keyCode==13){buttonClick()};">
                 <input type="button" class="btn btn-info " value="Sent">
             </div>
         </div>
     </div>
 </div>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

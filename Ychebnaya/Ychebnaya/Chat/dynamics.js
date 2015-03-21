@@ -1,4 +1,4 @@
-var number = -1;
+var numberChangeString = -1;
 var uniqueId = function() {
     var date=Date.now();
     var random = Math.random() * Math.random();
@@ -27,12 +27,12 @@ function delegateEvent(event) {
     if (event.type == 'click' && event.target.classList.contains('btn-info')) {
         buttonClick();
     }
-    if (document.getElementById('newMessage').value != "") {
+    if (document.getElementById('inputMessage').value != "") {
         if (event.type == 'click' && event.target.classList.contains('input')) {
             //Чтобы не выдавало ошибку при нажатии на input
             return;
         }
-        if (number == -1) {
+        if (numberChangeString == -1) {
             // Если вы ввели текст то сможете залогиниться
             if (event.type == 'click' && event.target.classList.contains('btn-success')) {
                 PickLogin();
@@ -40,7 +40,7 @@ function delegateEvent(event) {
             return;
         }
         alert('make changes , and then enter');
-        document.getElementById('newMessage').focus();
+        document.getElementById('inputMessage').focus();
         return;
     }
     else {
@@ -56,7 +56,7 @@ function delegateEvent(event) {
     }
 }
 function createAllTask(allTask) {
-    for(var i=0;i< allTask.length;i++)
+    for(var i = 0; i < allTask.length; i++)
     addTodo(allTask[i]);
 }
 function storeChat(listToSave) {
@@ -90,14 +90,14 @@ function restoreLogin() {
     return item && JSON.parse(item);
 }
 function PickLogin() {
-    var login = document.getElementById('Login');
+    var login = document.getElementById('inputLogin');
     document.getElementById('nameLogin').innerHTML = login.value;
     document.getElementById('onlineUser').innerHTML = login.value;
     storeLogin(login.value);
     login.value = '';
 }
 function buttonClick() {
-    var message = document.getElementById('newMessage').value;
+    var message = document.getElementById('inputMessage').value;
     var user = document.getElementById('nameLogin').innerHTML;
     if (user.localeCompare("") == 0) {
         alert("Заполни логин!!!")
@@ -107,16 +107,16 @@ function buttonClick() {
         return;
     var newTask = theTask(user,message);
     addTodo(newTask);
-    document.getElementById('newMessage').value ='';
+    document.getElementById('inputMessage').value ='';
     storeChat(taskList);
 }
 function addTodo(task) {
     var item = createItem(task);
     var items = document.getElementsByClassName('items')[0];
-    if (number != -1) {
-        items.childNodes[number].childNodes[2].data = task.message;
-        taskList[number].message = task.message;
-        number = -1;
+    if (numberChangeString != -1) {
+        items.childNodes[numberChangeString].childNodes[2].data = task.message;
+        taskList[numberChangeString].message = task.message;
+        numberChangeString = -1;
     }
     else {
         taskList.push(task);
@@ -159,18 +159,18 @@ function changeClick(item) {
         return;
     }
     var b = item.childNodes[2].textContent;
-    document.getElementById('newMessage').value = b;
+    document.getElementById('inputMessage').value = b;
     deletemessage(item);
-    document.getElementById('newMessage').focus();
+    document.getElementById('inputMessage').focus();
 }
 function deletemessage(item) {
     var items = document.getElementsByClassName('items')[0];
     var id = item.attributes['data-task-id'].value;
     for(var i = 0; i < taskList.length; i++) {
         if (taskList[i].id == id) {
-            number = i;
+            numberChangeString = i;
             break;
         }
     }
-    items.childNodes[number].childNodes[2].textContent ='';
+    items.childNodes[numberChangeString].childNodes[2].textContent ='';
 }

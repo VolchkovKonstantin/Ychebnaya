@@ -22,7 +22,7 @@ body {
     border-bottom: none;
 }
 
-.inputMessage {
+.panelMessage {
     float: left;
     width: 70%;
     height: 11.2%;
@@ -54,7 +54,7 @@ body {
     overflow: scroll;
 }
 
-.server {
+.isServerON {
     width: 80px;
 }
 .center {
