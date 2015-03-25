@@ -3,22 +3,22 @@
 <head>
     <meta charset="utf-8">
     <title>Chat</title>
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <script src="dynamics.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="javascript/dynamics.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body onload="run();">
 <div class="container">
     <div class="row">
-        <img src="images/users.jpg" class="span2">
+        <img src="css/images/users.jpg" class="span2">
         <div class="isServerON span1">
-            <h4>Server:<img src="images/greenButton.png"></h4>
+            <h4>Server:<img src="css/images/greenButton.png"></h4>
         </div>
     </div>
     <p class="lead">Enter Login:</p>
     <p id="nameLogin" class="fat"></p>
     <div class="form-inline">
-        <input id="inputLogin" type="text" class="input input-xlarge" onkeydown="if(event.keyCode==13){PickLogin()};">
+        <input id="inputLogin" type="text" class="input input-xlarge" onkeydown="if(event.keyCode==13){pickLogin()};">
         <input type="button" class="btn btn-small btn-success" value="Enter">
     </div>
     <div class="shell">

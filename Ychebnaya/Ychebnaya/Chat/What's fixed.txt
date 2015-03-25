@@ -1,0 +1,6 @@
+What Changed:
+1.All files in the folders
+2.formatted output
+3.First message fix
+4.firstnames functions without upperCase
+5.freed 1 global variable

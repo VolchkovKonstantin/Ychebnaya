@@ -1,0 +1,65 @@
+body {
+    background: url(images/bg.png);
+    overflow: scroll;
+}
+
+.shell {
+    padding: 50px 30px;
+    width: 800px;
+    height: 800px;
+}
+
+.chat {
+    float: left;
+    width: 70%;
+    height: 63.7%;
+    padding-left: 20px;
+    overflow: scroll;
+    background: moccasin;
+    border: #000000;
+    border-style: solid;
+    border-width: 1px;
+    border-bottom: none;
+}
+
+.panelMessage {
+    float: left;
+    width: 70%;
+    height: 11.2%;
+    padding-left: 20px;
+    background: #000000;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.online {
+    float: left;
+    height: 75%;
+    width: 23%;
+    background: #000000;
+    border: #000000;
+    border-style: solid;
+    border-width: 1px;
+    border-right: none;
+}
+
+.green {
+    color: yellowgreen;
+}
+
+.users {
+    height: 75%;
+    width: 100%;
+    background: moccasin;
+    overflow: scroll;
+}
+
+.isServerON {
+    width: 80px;
+}
+.center {
+    text-align: center;
+}
+.fat {
+    font-weight: bold;
+}
