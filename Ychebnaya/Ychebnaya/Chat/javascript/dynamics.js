@@ -77,7 +77,7 @@ function pickLogin() {
     document.getElementById('onlineUser').innerHTML = login.value;
     storeLogin(login.value);
     login.value = '';
-    var items = document.getElementsByClassName('items')[0];
+    var items = document.getElementsByClassName('items') [0];
     for (var i = 0; i < items.childElementCount; i++) {
         if (document.getElementById('nameLogin').innerHTML !== items.childNodes[i].childNodes[0].textContent && items.childNodes[i].childElementCount == 4) {
             items.childNodes[i].removeChild(items.childNodes[i].childNodes[3]);
