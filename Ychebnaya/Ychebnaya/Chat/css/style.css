@@ -57,9 +57,23 @@ body {
 .isServerON {
     width: 80px;
 }
+
 .center {
     text-align: center;
 }
+
 .fat {
     font-weight: bold;
+}
+
+.unvisable {
+    visibility: hidden;
+}
+
+.border1 {
+    border: solid 1px #c09853;
+}
+
+.border2 {
+    border: solid 1px #62c462;
 }
