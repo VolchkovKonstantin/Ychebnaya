@@ -27,14 +27,32 @@ function delegateEvent(event) {
     if (event.type == 'click' && event.target.classList.contains('btn-info')) {
         buttonClick();
     }
-    if (event.type == 'click' && event.target.classList.contains('btn-success')) {
-        pickLogin();
+    if (document.getElementById('inputMessage').value != "") {
+        if (event.type == 'click' && event.target.classList.contains('input')) {
+            //Чтобы не выдавало ошибку при нажатии на input
+            return;
+        }
+        if (numberChangeString == -1) {
+            // Если вы ввели текст то сможете залогиниться
+            if (event.type == 'click' && event.target.classList.contains('btn-success')) {
+                pickLogin();
+            }
+            return;
+        }
+        alert('Please finish input');
+        document.getElementById('inputMessage').focus();
+        return;
     }
-    if (event.type == 'click' && event.target.classList.contains('btn-warning')) {
-        changeClick(event.target.parentNode);
-    }
-    if (event.type == 'click' && event.target.classList.contains('btn-danger')) {
-        deleteClick(event.target.parentNode, taskList);
+    else {
+        if (event.type == 'click' && event.target.classList.contains('btn-success')) {
+            pickLogin();
+        }
+        if (event.type == 'click' && event.target.classList.contains('btn-warning')) {
+            changeClick(event.target.parentNode);
+        }
+        if (event.type == 'click' && event.target.classList.contains('btn-danger')) {
+            deleteClick(event.target.parentNode);
+        }
     }
 }
 function createAllTask(allTask, taskList) {
@@ -123,6 +141,8 @@ function addTodo(task, taskList) {
     else {
         taskList.push(task);
         items.appendChild(item);
+        var block = document.getElementsByClassName("chat");
+        block[0].scrollTop = block[0].scrollHeight;
     }
 }
 function createItem(task) {

@@ -5,3 +5,7 @@ What Changed:
 4.firstnames functions without upperCase
 5.freed 1 global variable
 6.buttons change/delete only for online users.
+7.fixed debug(when eou pressed change now everything are good)
+8.add textarea instead of input
+9.add autoscrolling when you add new message
+10.a pleasing view

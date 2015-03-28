@@ -5,26 +5,28 @@ body {
 
 .shell {
     padding: 50px 30px;
-    width: 800px;
-    height: 800px;
+    width: 1000px;
+    height: 900px;
 }
 
 .chat {
     float: left;
-    width: 70%;
+    width: 73%;
     height: 63.7%;
     padding-left: 20px;
-    overflow: scroll;
+    overflow-x: hidden;;
+    overflow-y: auto;
     background: moccasin;
     border: #000000;
     border-style: solid;
     border-width: 1px;
     border-bottom: none;
+    word-wrap: break-word;
 }
 
 .panelMessage {
     float: left;
-    width: 70%;
+    width: 73%;
     height: 11.2%;
     padding-left: 20px;
     background: #000000;
@@ -35,7 +37,7 @@ body {
 .online {
     float: left;
     height: 75%;
-    width: 23%;
+    width: 20%;
     background: #000000;
     border: #000000;
     border-style: solid;
@@ -48,7 +50,7 @@ body {
 }
 
 .users {
-    height: 75%;
+    height: 76%;
     width: 100%;
     background: moccasin;
     overflow: scroll;
@@ -76,4 +78,14 @@ body {
 
 .border2 {
     border: solid 1px  #62c462;
+}
+.enterLogin {
+    white-space: nowrap;
+}
+.textArea {
+    resize: none; /* Запрещаем изменять размер */
+    min-height: 80px;
+    max-width: 1000px;
+    min-width: 650px;
+    text-align: start;
 }

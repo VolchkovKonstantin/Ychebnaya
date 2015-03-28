@@ -15,10 +15,10 @@
             <h4>Server:<img src="css/images/greenButton.png"></h4>
         </div>
     </div>
-    <p class="lead">Enter Login:</p>
-    <p id="nameLogin" class="fat"></p>
+    <div class="lead">Enter Login:<b id="nameLogin" class="fat"></b></div>
     <div class="form-inline">
-        <input id="inputLogin" type="text" class="input input-xlarge" onkeydown="if(event.keyCode==13){pickLogin()};">
+        <input id="inputLogin" type="text" class="input input-xlarge" onkeydown="if(event.keyCode==13){pickLogin()};"
+               maxlength="18">
         <input type="button" class="btn btn-small btn-success" value="Enter">
     </div>
     <div class="shell">
@@ -33,8 +33,8 @@
         </div>
         <div class="panelMessage">
             <div class="form-inline">
-                <input id="inputMessage" type="text" class="input input-xxlarge"
-                       onkeydown="if(event.keyCode==13){buttonClick()};">
+                <textarea id="inputMessage" type="text" class="input textArea"
+                          onkeydown="if(event.keyCode==13){buttonClick();event.preventDefault();};"></textarea>
                 <input type="button" class="btn btn-info " value="Sent">
             </div>
         </div>
