@@ -1,15 +1,13 @@
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
+import java.util.TreeMap;
 
 public class MessageExchange {
-
     private JSONParser jsonParser = new JSONParser();
 
     public String getToken(int index) {
@@ -21,48 +19,50 @@ public class MessageExchange {
         return (Integer.valueOf(token.substring(2, token.length() - 2)) - 11) / 8;
     }
 
-    public String getServerResponse(List<String> messages) {
+    public String getServerResponse(List<Message> messages) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("messages", messages);
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < messages.size(); i++) {
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("id", messages.get(i).getID());
+            jsonObject1.put("username", messages.get(i).getUsername());
+            jsonObject1.put("userMessage", messages.get(i).getMessage());
+            jsonArray.add(jsonObject1);
+        }
+        jsonObject.put("messages", jsonArray);
         jsonObject.put("token", getToken(messages.size()));
         return jsonObject.toJSONString();
     }
 
-    public String getClientSendMessageRequest(String message) {
+    public String getClientSendMessageRequest(int id, String username, String message) {
         JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", id);
+        jsonObject.put("username", username);
         jsonObject.put("message", message);
         return jsonObject.toJSONString();
     }
 
-    public String getClientMessage(InputStream inputStream) throws ParseException {
-        return (String) getJSONObject(inputStreamToString(inputStream)).get("message");
+    public JSONObject getClientMessage(InputStream inputStream) throws ParseException {
+        JSONObject jsonObject = getJSONObject(inputStreamToString(inputStream));
+        return jsonObject;
     }
 
     public JSONObject getJSONObject(String json) throws ParseException {
-        return (JSONObject) jsonParser.parse(json);
+        return (JSONObject) jsonParser.parse(json.trim());
     }
 
     public String inputStreamToString(InputStream in) {
-        InputStreamReader is = new InputStreamReader(in);
-        StringBuilder sb = new StringBuilder();
-        BufferedReader br = new BufferedReader(is);
-        String read = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length = 0;
         try {
-            read = br.readLine();
+            while ((length = in.read(buffer)) != -1) {
+                baos.write(buffer, 0, length);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        while (read != null) {
-            sb.append(read);
-            try {
-                read = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        return sb.toString();
+        return new String(baos.toByteArray());
     }
 }

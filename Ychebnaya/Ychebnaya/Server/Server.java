@@ -1,55 +1,42 @@
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.SynchronousQueue;
 
 public class Server implements HttpHandler {
-    private List<String> history = new ArrayList<String>();
+    private Map<Integer, Message> history = new TreeMap<Integer, Message>();
     private MessageExchange messageExchange = new MessageExchange();
-    private static PrintWriter log;
-    public static void loggin(String date, String event) {
-        log.println(date+" "+event);
-        log.flush();
-    }
-    public static String whatIsTime() {
-        Date now = new Date();
 
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        String s = formatter.format(now);
-        return s;
-    }
-    public static void main(String[] args) throws IOException {
-        log = new PrintWriter(new FileWriter("serverlog.txt"));
-        if (args.length != 1)
+
+    public static void main(String[] args) {
+        if (args.length != 1) {
             System.out.println("Usage: java Server port");
-        else {
+        } else {
             try {
                 System.out.println("Server is starting...");
-                Integer port = Integer.parseInt(args[0]);
+                Integer port = Integer.parseInt(args[0]);//999;
                 HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
                 System.out.println("Server started.");
-                loggin(whatIsTime(),"Server started");
                 String serverHost = InetAddress.getLocalHost().getHostAddress();
                 System.out.println("Get list of messages: GET http://" + serverHost + ":" + port + "/chat?token={token}");
-                loggin(whatIsTime(),"method get");
-                System.out.println("Send message: POST http://" + serverHost + ":" + port + "/chat provide body json in format {\"message\" : \"{message}\"} ");
-                loggin(whatIsTime(),"method post");
+                System.out.println("Send message: POST http://" + serverHost + ":" + port + "/chat provide body json in format {\"id\" : \"{id}\", \"username\" : \"{User 2}\", \"message\" : \"{message}\"} ");
+                System.out.println("Send message: DELETE http://" + serverHost + ":" + port + "/chat provide body json in format {\"id\" : \"{id}\", \"username\" : \"{User 2}\", \"message\" : \"{message}\"} ");
+                System.out.println("Send message: PUT http://" + serverHost + ":" + port + "/chat provide body json in format {\"id\" : \"{id}\", \"username\" : \"{User 2}\", \"message\" : \"{message}\"} ");
+
                 server.createContext("/chat", new Server());
                 server.setExecutor(null);
                 server.start();
             } catch (IOException e) {
                 System.out.println("Error creating http server: " + e);
-                loggin(whatIsTime(),"Error creating http server");
             }
         }
     }
@@ -62,11 +49,26 @@ public class Server implements HttpHandler {
             response = doGet(httpExchange);
         } else if ("POST".equals(httpExchange.getRequestMethod())) {
             doPost(httpExchange);
+        } else if ("DELETE".equals(httpExchange.getRequestMethod())) {
+            doDelete(httpExchange);
+        } else if ("PUT".equals(httpExchange.getRequestMethod())) {
+            doPut(httpExchange);
         } else {
             response = "Unsupported http method: " + httpExchange.getRequestMethod();
         }
 
         sendResponse(httpExchange, response);
+    }
+
+    private ArrayList<Message> giveArrayMessages(int index) {
+        ArrayList<Message> messages = new ArrayList<Message>();
+        for (int i = index; i < history.size(); i++) {
+            Message mes = history.get(i);
+            if (mes != null) {
+                messages.add(mes);
+            }
+        }
+        return messages;
     }
 
     private String doGet(HttpExchange httpExchange) {
@@ -76,32 +78,72 @@ public class Server implements HttpHandler {
             String token = map.get("token");
             if (token != null && !"".equals(token)) {
                 int index = messageExchange.getIndex(token);
-                return messageExchange.getServerResponse(history.subList(index, history.size()));
+                return messageExchange.getServerResponse(giveArrayMessages(index));//username,history.subList(index, history.size()));
             } else {
                 return "Token query parameter is absent in url: " + query;
             }
         }
-        return  "Absent query in url";
+        return "Absent query in url";
     }
 
     private void doPost(HttpExchange httpExchange) {
         try {
-            String message = messageExchange.getClientMessage(httpExchange.getRequestBody());
-            loggin(whatIsTime(),"Prtint message");
-            System.out.println("Get Message from User : " + message);
-            history.add(message);
+            JSONObject jsonObject = messageExchange.getClientMessage(httpExchange.getRequestBody());
+            int id = Integer.parseInt(jsonObject.get("id").toString());
+            String username = jsonObject.get("username").toString();
+            String message = jsonObject.get("message").toString();
+            System.out.println(id + ") " + username + " : " + message);
+            history.put(id, new Message(id, username, message));
         } catch (ParseException e) {
             System.err.println("Invalid user message: " + httpExchange.getRequestBody() + " " + e.getMessage());
         }
     }
 
-    private void sendResponse(HttpExchange httpExchange, String response) throws IOException {
-        httpExchange.sendResponseHeaders(200, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        loggin(whatIsTime(),"request send");
-        os.write(response.getBytes());
-        os.flush();
-        os.close();
+    private void doDelete(HttpExchange httpExchange) {
+        try {
+            JSONObject jsonObject = messageExchange.getClientMessage(httpExchange.getRequestBody());
+            int id = Integer.parseInt(jsonObject.get("id").toString());
+            String username = jsonObject.get("username").toString();
+            Message messages = history.get(id);
+            if ((messages != null) && (username.equals(messages.getUsername())) && (messages.getFlag())) {
+                System.out.println("Message are deleted " + username + " : " + messages.getMessage());
+                messages.setMessage("");
+                messages.setFlag(false);
+            }
+        } catch (ParseException e) {
+            System.err.println("Invalid user message: " + httpExchange.getRequestBody() + " " + e.getMessage());
+        }
+    }
+
+    private void doPut(HttpExchange httpExchange) {
+        try {
+            JSONObject jsonObject = messageExchange.getClientMessage(httpExchange.getRequestBody());
+            int id = Integer.parseInt(jsonObject.get("id").toString());
+            String username = jsonObject.get("username").toString();
+            String message = jsonObject.get("message").toString();
+            Message messages = history.get(id);
+            if ((messages != null) && (username.equals(messages.getUsername())) && (messages.getFlag())) {
+                System.out.println("Put Message from user " + username + " : " + message);
+                messages.setMessage(message);
+            }
+        } catch (ParseException e) {
+            System.err.println("Invalid user message: " + httpExchange.getRequestBody() + " " + e.getMessage());
+        }
+    }
+
+    private void sendResponse(HttpExchange httpExchange, String response) {
+        try {
+            byte[] bytes = response.getBytes();
+            Headers headers = httpExchange.getResponseHeaders();
+            headers.add("Access-Control-Allow-Origin", "*");
+            httpExchange.sendResponseHeaders(200, bytes.length);
+            OutputStream os = httpExchange.getResponseBody();
+            os.write(bytes);
+            os.flush();
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Map<String, String> queryToMap(String query) {
