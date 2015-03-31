@@ -1,0 +1,13 @@
+POST http://localhost:999/chat HTTP/1.1
+Host: localhost:999
+User-Agent: Composer
+Content-Length: 27
+
+{"message":"My post claim"}
+HTTP/1.1 200 OK
+Transfer-encoding: chunked
+Access-control-allow-origin: *
+Date: Tue, 31 Mar 2015 20:33:58 GMT
+
+0
+
