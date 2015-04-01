@@ -15,7 +15,6 @@ public class Client implements Runnable {
     private MessageExchange messageExchange = new MessageExchange();
     private String host;
     private Integer port;
-    private String username;
 
     public Client(String host, Integer port) {
         this.host = host;
@@ -24,17 +23,17 @@ public class Client implements Runnable {
 
 
     public static void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Usage: java ChatClient host port");
-        } else {
-            System.out.println("Connection to server...");
-            String serverHost = /*"localhost";*/args[0];
-            Integer serverPort = /*999;*/Integer.parseInt(args[1]);
-            Client client = new Client(serverHost, serverPort);
-            new Thread(client).start();
-            System.out.println("Connected to server: " + serverHost + ":" + serverPort);
-            client.listen();
-        }
+        //if (args.length != 2) {
+        //   System.out.println("Usage: java ChatClient host port");
+        //} else {
+        System.out.println("Connection to server...");
+        String serverHost = "localhost";/*args[0];*/
+        Integer serverPort = 999;//Integer.parseInt(args[1]);
+        Client client = new Client(serverHost, serverPort);
+        new Thread(client).start();
+        System.out.println("Connected to server: " + serverHost + ":" + serverPort);
+        client.listen();
+        //}
     }
 
     private HttpURLConnection getHttpURLConnection() throws IOException {
@@ -51,10 +50,10 @@ public class Client implements Runnable {
             String response = messageExchange.inputStreamToString(connection.getInputStream());
             JSONObject jsonObject = messageExchange.getJSONObject(response);
             JSONArray jsonArray = (JSONArray) jsonObject.get("messages");
-            for (Object o : jsonArray) {
-                JSONObject json = (JSONObject) o;
-                System.out.println(json.get("userMessage"));
-                list.add(json.get("userMessage").toString());
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject json = (JSONObject) jsonArray.get(i);
+                System.out.println(json.get("message"));
+                list.add(json.get("message").toString());
             }
         } catch (IOException e) {
             System.err.println("ERROR: " + e.getMessage());
@@ -69,7 +68,7 @@ public class Client implements Runnable {
         return list;
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(String message, String username) {
         HttpURLConnection connection = null;
         try {
             connection = getHttpURLConnection();
@@ -114,11 +113,14 @@ public class Client implements Runnable {
     public void run() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Input username after messege's your friends: ");
-        username = scanner.nextLine();
+        String username = "";
+        while (username != "") {
+            username = scanner.nextLine();
+        }
         System.out.println("And now you can write your messages: ");
         while (true) {
             String message = scanner.nextLine();
-            sendMessage(message);
+            sendMessage(message, username);
         }
     }
 }

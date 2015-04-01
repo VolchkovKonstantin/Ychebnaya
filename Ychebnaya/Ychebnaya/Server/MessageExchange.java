@@ -25,8 +25,8 @@ public class MessageExchange {
         for (int i = 0; i < messages.size(); i++) {
             JSONObject jsonObject1 = new JSONObject();
             jsonObject1.put("id", messages.get(i).getID());
-            jsonObject1.put("username", messages.get(i).getUsername());
-            jsonObject1.put("userMessage", messages.get(i).getMessage());
+            jsonObject1.put("user", messages.get(i).getUser());
+            jsonObject1.put("message", messages.get(i).getMessage());
             jsonArray.add(jsonObject1);
         }
         jsonObject.put("messages", jsonArray);
@@ -37,7 +37,7 @@ public class MessageExchange {
     public String getClientSendMessageRequest(int id, String username, String message) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", id);
-        jsonObject.put("username", username);
+        jsonObject.put("user", username);
         jsonObject.put("message", message);
         return jsonObject.toJSONString();
     }

@@ -18,27 +18,28 @@ public class Server implements HttpHandler {
 
 
     public static void main(String[] args) {
-        if (args.length != 1) {
+       /* if (args.length != 1) {
             System.out.println("Usage: java Server port");
         } else {
-            try {
-                System.out.println("Server is starting...");
-                Integer port = Integer.parseInt(args[0]);//999;
-                HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-                System.out.println("Server started.");
-                String serverHost = InetAddress.getLocalHost().getHostAddress();
-                System.out.println("Get list of messages: GET http://" + serverHost + ":" + port + "/chat?token={token}");
-                System.out.println("Send message: POST http://" + serverHost + ":" + port + "/chat provide body json in format {\"id\" : \"{id}\", \"username\" : \"{User 2}\", \"message\" : \"{message}\"} ");
-                System.out.println("Send message: DELETE http://" + serverHost + ":" + port + "/chat provide body json in format {\"id\" : \"{id}\", \"username\" : \"{User 2}\", \"message\" : \"{message}\"} ");
-                System.out.println("Send message: PUT http://" + serverHost + ":" + port + "/chat provide body json in format {\"id\" : \"{id}\", \"username\" : \"{User 2}\", \"message\" : \"{message}\"} ");
+*/
+        try {
+            System.out.println("Server is starting...");
+            Integer port = /*Integer.parseInt(args[0]);*/999;
+            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+            System.out.println("Server started.");
+            String serverHost = InetAddress.getLocalHost().getHostAddress();
+            System.out.println("Get list of messages: GET http://" + serverHost + ":" + port + "/chat?token={token}");
+            System.out.println("Send message: POST http://" + serverHost + ":" + port + "/chat provide body json in format {\"id\" : \"{id}\", \"user\" : \"{User 2}\", \"message\" : \"{message}\"} ");
+            System.out.println("Send message: DELETE http://" + serverHost + ":" + port + "/chat provide body json in format {\"id\" : \"{id}\"} ");
+            System.out.println("Send message: PUT http://" + serverHost + ":" + port + "/chat provide body json in format {\"id\" : \"{id}\",\"message\" : \"{message}\"} ");
 
-                server.createContext("/chat", new Server());
-                server.setExecutor(null);
-                server.start();
-            } catch (IOException e) {
-                System.out.println("Error creating http server: " + e);
-            }
+            server.createContext("/chat", new Server());
+            server.setExecutor(null);
+            server.start();
+        } catch (IOException e) {
+            System.out.println("Error creating http server: " + e);
         }
+        //    }
     }
 
     @Override
@@ -90,10 +91,11 @@ public class Server implements HttpHandler {
         try {
             JSONObject jsonObject = messageExchange.getClientMessage(httpExchange.getRequestBody());
             int id = Integer.parseInt(jsonObject.get("id").toString());
-            String username = jsonObject.get("username").toString();
+            String user = jsonObject.get("user").toString();
             String message = jsonObject.get("message").toString();
-            System.out.println(id + ") " + username + " : " + message);
-            history.put(id, new Message(id, username, message));
+            System.out.println(id + ") " + user + " : " + message);
+            Message structOfMessage = new Message(id, user, message);
+            history.put(id, structOfMessage);
         } catch (ParseException e) {
             System.err.println("Invalid user message: " + httpExchange.getRequestBody() + " " + e.getMessage());
         }
@@ -103,10 +105,9 @@ public class Server implements HttpHandler {
         try {
             JSONObject jsonObject = messageExchange.getClientMessage(httpExchange.getRequestBody());
             int id = Integer.parseInt(jsonObject.get("id").toString());
-            String username = jsonObject.get("username").toString();
             Message messages = history.get(id);
-            if ((messages != null) && (username.equals(messages.getUsername())) && (messages.getFlag())) {
-                System.out.println("Message are deleted " + username + " : " + messages.getMessage());
+            if ((messages != null) && (messages.getFlag())) {
+                System.out.println("Delete Message : " + messages.getMessage());
                 messages.setMessage("");
                 messages.setFlag(false);
             }
@@ -119,11 +120,10 @@ public class Server implements HttpHandler {
         try {
             JSONObject jsonObject = messageExchange.getClientMessage(httpExchange.getRequestBody());
             int id = Integer.parseInt(jsonObject.get("id").toString());
-            String username = jsonObject.get("username").toString();
             String message = jsonObject.get("message").toString();
             Message messages = history.get(id);
-            if ((messages != null) && (username.equals(messages.getUsername())) && (messages.getFlag())) {
-                System.out.println("Put Message from user " + username + " : " + message);
+            if ((messages != null) && (messages.getFlag())) {
+                System.out.println("Change Message " + messages.getMessage() + " : " + message);
                 messages.setMessage(message);
             }
         } catch (ParseException e) {

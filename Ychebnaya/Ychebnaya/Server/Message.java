@@ -3,13 +3,13 @@
  */
 public class Message {
     private int id;
-    private String username;
+    private String user;
     private String message;
     private boolean flag;
 
-    public Message(int id, String username, String message) {
+    public Message(int id, String user, String message) {
         this.id = id;
-        this.username = username;
+        this.user = user;
         this.message = message;
         this.flag = true;
     }
@@ -18,8 +18,8 @@ public class Message {
         return this.id;
     }
 
-    public String getUsername() {
-        return this.username;
+    public String getUser() {
+        return this.user;
     }
 
     public String getMessage() {
@@ -35,8 +35,8 @@ public class Message {
         return;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(String username) {
+        this.user = username;
         return;
     }
 
@@ -47,5 +47,10 @@ public class Message {
 
     public void setFlag(boolean flag) {
         this.flag = flag;
+    }
+
+    public Message getStructofMessage(int id, String user, String message) {
+        Message structMessage = new Message(id, user, message);
+        return structMessage;
     }
 }
