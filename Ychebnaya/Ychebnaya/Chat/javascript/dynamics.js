@@ -30,16 +30,9 @@ function delegateEvent(event) {
     if (event.type == 'click' && (event.target.classList.contains('btn-sent')||event.target.classList.contains('btn-my'))) {
         buttonClick();
     }
-    if (document.getElementById('inputMessage').value != "") {
+    if (document.getElementById('inputMessage').value != "" && numberChangeString != -1) {
         if (event.type == 'click' && event.target.classList.contains('input')) {
             //Чтобы не выдавало ошибку при нажатии на input
-            return;
-        }
-        if (numberChangeString == -1) {
-            // Если вы ввели текст то сможете залогиниться
-            if (event.type == 'click' && event.target.classList.contains('btn-info')) {
-                pickLogin();
-            }
             return;
         }
         alert('Please finish input');
