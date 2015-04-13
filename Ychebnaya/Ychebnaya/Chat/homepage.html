@@ -9,35 +9,29 @@
 </head>
 <body onload="run();">
 <div class="container">
-    <div class="row">
-        <img src="css/images/users.jpg" class="span2">
-        <div class="isServerON span1">
-            <h4>Server:<img src="css/images/greenButton.png"></h4>
-        </div>
-    </div>
-    <div class="lead">Enter Login:<b id="nameLogin" class="fat"></b></div>
+    <div class="shellLogin center">
+        <img src="css/images/user.png" class="img-circle">
+    <div class="leadtext center">Enter Login:<p id="nameLogin" class="fat"></p></div>
     <div class="form-inline">
-        <input id="inputLogin" type="text" class="input input-xlarge" onkeydown="if(event.keyCode==13){pickLogin()};"
-               maxlength="18">
-        <input type="button" class="btn btn-small btn-success" value="Enter">
+        <input id="inputLogin" type="text" class="input input-xlarge" onkeydown="isEnter();"
+               maxlength="20">
+        <input type="button" class="mybtn btn-info" value="Enter">
     </div>
-    <div class="shell">
-        <div class="online">
-            <h1 class="green center">Online:</h1>
-            <div class="users">
-                <p id="onlineUser" class="center fat"></p>
-            </div>
-        </div>
+    </div>
+    <div class="shellChat">
         <div class="chat">
             <div class="items"></div>
         </div>
         <div class="panelMessage">
             <div class="form-inline">
                 <textarea id="inputMessage" type="text" class="input textArea"
-                          onkeydown="if(event.keyCode==13){buttonClick();event.preventDefault();};"></textarea>
-                <input type="button" class="btn btn-info " value="Sent">
+                          onkeydown="isShiftEnter();"></textarea>
             </div>
         </div>
+    </div>
+    <div class="btn-my positionsent"><div class ="btn-sent"></div></div>
+    <div class="isServerON">
+        <h4>Server:<img src="css/images/greenButton.png"></h4>
     </div>
 </div>
 </body>

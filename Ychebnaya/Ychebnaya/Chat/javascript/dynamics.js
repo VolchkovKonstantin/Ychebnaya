@@ -14,17 +14,20 @@ var theTask = function (user, message) {
 function run() {
     var Container = document.getElementsByClassName('container')[0];
     Container.addEventListener('click', delegateEvent);
-    allTask = restoreChat();
     taskList = restoreChat();
+    if (taskList == null) {
+        taskList=[];
+    }
     var login = restoreLogin();
     if (login != "") {
         document.getElementById('nameLogin').innerHTML = login;
-        document.getElementById('onlineUser').innerHTML = login;
     }
-    createAllTask(allTask, taskList);
+    createAllTask(taskList);
+    var block = document.getElementsByClassName("chat")[0];
+    block.scrollTop = block.scrollHeight;
 }
 function delegateEvent(event) {
-    if (event.type == 'click' && event.target.classList.contains('btn-info')) {
+    if (event.type == 'click' && (event.target.classList.contains('btn-sent')||event.target.classList.contains('btn-my'))) {
         buttonClick();
     }
     if (document.getElementById('inputMessage').value != "") {
@@ -34,7 +37,7 @@ function delegateEvent(event) {
         }
         if (numberChangeString == -1) {
             // Если вы ввели текст то сможете залогиниться
-            if (event.type == 'click' && event.target.classList.contains('btn-success')) {
+            if (event.type == 'click' && event.target.classList.contains('btn-info')) {
                 pickLogin();
             }
             return;
@@ -44,20 +47,20 @@ function delegateEvent(event) {
         return;
     }
     else {
-        if (event.type == 'click' && event.target.classList.contains('btn-success')) {
+        if (event.type == 'click' && event.target.classList.contains('btn-info')) {
             pickLogin();
         }
-        if (event.type == 'click' && event.target.classList.contains('btn-warning')) {
+        if (event.type == 'click' && event.target.classList.contains('iconChange')) {
             changeClick(event.target.parentNode);
         }
-        if (event.type == 'click' && event.target.classList.contains('btn-danger')) {
+        if (event.type == 'click' && event.target.classList.contains('iconDelete')) {
             deleteClick(event.target.parentNode);
         }
     }
 }
-function createAllTask(allTask, taskList) {
-    for (var i = 0; i < allTask.length; i++)
-        addTodo(allTask[i], taskList);
+function createAllTask(taskList) {
+    for (var i = 0; i < taskList.length; i++)
+        addTodo(taskList[i]);
 }
 function storeChat(listToSave) {
     if (typeof(Storage) == "undefined") {
@@ -92,7 +95,6 @@ function restoreLogin() {
 function pickLogin() {
     var login = document.getElementById('inputLogin');
     document.getElementById('nameLogin').innerHTML = login.value;
-    document.getElementById('onlineUser').innerHTML = login.value;
     storeLogin(login.value);
     login.value = '';
     var items = document.getElementsByClassName('items') [0];
@@ -108,9 +110,9 @@ function pickLogin() {
             items.childNodes[i].childNodes[0].classList.add('fat');
             items.childNodes[i].classList.remove('border1');
             items.childNodes[i].classList.add('border2');
-            var deletes = '<input class="btn  btn-danger btn-mini" type="button" value="delete">';
+            var deletes = '<img class="iconDelete">';
             items.childNodes[i].innerHTML += deletes;
-            deletes = '<input class="btn btn-warning btn-mini" type="button" value="change"></div>';
+            deletes = '<img class="iconChange">';
             items.childNodes[i].innerHTML += deletes;
         }
     }
@@ -126,12 +128,11 @@ function buttonClick() {
     if (!message)
         return;
     var newTask = theTask(user, message);
-    addTodo(newTask, taskList);
+    addTodoInternal(newTask, taskList);
     document.getElementById('inputMessage').value = '';
     storeChat(taskList);
 }
-function addTodo(task, taskList) {
-    var item = createItem(task);
+function addTodoInternal(task, taskList) {
     var items = document.getElementsByClassName('items')[0];
     if (numberChangeString != -1) {
         items.childNodes[numberChangeString].childNodes[1].innerHTML = task.message;
@@ -139,17 +140,22 @@ function addTodo(task, taskList) {
         numberChangeString = -1;
     }
     else {
+        addTodo(task);
         taskList.push(task);
-        items.appendChild(item);
         var block = document.getElementsByClassName("chat");
         block[0].scrollTop = block[0].scrollHeight;
     }
 }
+function addTodo(task) {
+    var item = createItem(task);
+    var items = document.getElementsByClassName('items')[0];
+    items.appendChild(item);
+}
 function createItem(task) {
     var temp = document.createElement('div');
     var htmlAsText = '<div class="item border1" data-task-id="индефикатор">' +
-        '<p>Логин</p><p>Сообщение</p><input class="btn  btn-danger btn-mini" type="button" value="delete">' +
-        '<input class="btn btn-warning btn-mini" type="button" value="change"></div>';
+        '<p>Логин</p><p>Сообщение</p><img class="iconDelete">' +
+        '<img class="iconChange"></div>';
     temp.innerHTML = htmlAsText;
     updateItem(temp.firstChild, task);
     return temp.firstChild;
@@ -184,8 +190,7 @@ function deleteClick(item) {
 function changeClick(item) {
     var b = item.childNodes[1].textContent;
     document.getElementById('inputMessage').value = b;
-    deleteMessage(item, taskList);
-    document.getElementById('inputMessage').focus();
+    deleteMessage(item);
 }
 function deleteMessage(item) {
     taskList = restoreChat();
@@ -198,4 +203,16 @@ function deleteMessage(item) {
         }
     }
     items.childNodes[numberChangeString].childNodes[1].textContent = '';
+    document.getElementById('inputMessage').focus();
+}
+function isEnter() {
+    if (event.keyCode == 13) {
+        pickLogin();
+    }
+}
+function isShiftEnter() {
+        if (event.keyCode == 13 && event.shiftKey==false) {
+            buttonClick();
+            event.preventDefault();
+        }
 }
