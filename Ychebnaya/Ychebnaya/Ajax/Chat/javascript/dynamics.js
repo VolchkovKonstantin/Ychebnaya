@@ -14,29 +14,40 @@ var theTask = function (user, message) {
 var appState = {
     mainUrl : 'http://localhost:999/chat',
     taskList:[],
-    token : 'TE11EN',
-    lastUser : ""
+    token : 'TE11EN'
 };
-var Mainusername="";
+/*var Users = function (id,user){
+    return {
+        id: id,
+        user: user
+    }
+};
+*/
 function run() {
     var Container = document.getElementsByClassName('container')[0];
     Container.addEventListener('click', delegateEvent);
+    /*  id = uniqueId();
+     var logins = restoreLogin();
+     for (var i = 0; i < logins.length; i++) {
+     if(logins[i].id == id) {
+     break;
+     }
+     }
+     var login = logins[i].user;
+     if (login != "") {
+     document.getElementById('nameLogin').innerHTML = login;
+     }
+     */
     restore();
+    setInterval(function() {
+     restore();}, 20000);
 }
 function delegateEvent(event) {
-    if (event.type == 'click' && event.target.classList.contains('btn-info')) {
+    if (event.type == 'click' && (event.target.classList.contains('btn-sent') || event.target.classList.contains('btn-my'))) {
         buttonClick();
     }
-    if (document.getElementById('inputMessage').value != "") {
+    if (document.getElementById('inputMessage').value != "" && numberChangeString != -1) {
         if (event.type == 'click' && event.target.classList.contains('input')) {
-            //Чтобы не выдавало ошибку при нажатии на input
-            return;
-        }
-        if (numberChangeString == -1) {
-            // Если вы ввели текст то сможете залогиниться
-            if (event.type == 'click' && event.target.classList.contains('btn-success')) {
-                pickLogin();
-            }
             return;
         }
         alert('Please finish input');
@@ -44,20 +55,18 @@ function delegateEvent(event) {
         return;
     }
     else {
-        if (event.type == 'click' && event.target.classList.contains('btn-success')) {
+        if (event.type == 'click' && event.target.classList.contains('btn-info')) {
             pickLogin();
         }
-        if (event.type == 'click' && event.target.classList.contains('btn-warning')) {
+        if (event.type == 'click' && event.target.classList.contains('iconChange')) {
             changeClick(event.target.parentNode);
         }
-        if (event.type == 'click' && event.target.classList.contains('btn-danger')) {
+        if (event.type == 'click' && event.target.classList.contains('iconDelete')) {
             deleteClick(event.target.parentNode);
         }
     }
 }
-function createAllTask(allTask, login) {
-    document.getElementById('nameLogin').innerHTML = login;
-    document.getElementById('onlineUser').innerHTML = login;
+function createAllTask(allTask) {
     for (var i = 0; i < allTask.length; i++)
         addTodoInternal(allTask[i]);
 }
@@ -68,12 +77,12 @@ function createAllTask(allTask, login) {
     }
     localStorage.setItem("Chat", JSON.stringify(listToSave));
 }
-function storeLogin(login) {
+function storeLogin(saveLogin) {
     if (typeof(Storage) == "undefined") {
         alert('localStorage is not accessible');
         return;
     }
-    localStorage.setItem("Login", JSON.stringify(login));
+    localStorage.setItem("Login", JSON.stringify(savelogin));
 }
 function restoreChat() {
     if (typeof(Storage) == "undefined") {
@@ -83,6 +92,7 @@ function restoreChat() {
     var item = localStorage.getItem("Chat");
     return item && JSON.parse(item);
 }
+
 function restoreLogin() {
     if (typeof(Storage) == "undefined") {
         alert('localStorage is not accessible');
@@ -94,10 +104,8 @@ function restoreLogin() {
 */
 function pickLogin() {
     var login = document.getElementById('inputLogin');
-    Mainusername = login;
     document.getElementById('nameLogin').innerHTML = login.value;
-    document.getElementById('onlineUser').innerHTML = login.value;
-    postRquestLogin(login.value);
+   // postRquestLogin(login.value);
     //storeLogin(login.value);
     login.value = '';
     var items = document.getElementsByClassName('items') [0];
@@ -113,18 +121,12 @@ function pickLogin() {
             items.childNodes[i].childNodes[0].classList.add('fat');
             items.childNodes[i].classList.remove('border1');
             items.childNodes[i].classList.add('border2');
-            var deletes = '<input class="btn  btn-danger btn-mini" type="button" value="delete">';
+            var deletes = '<img class="iconDelete">';
             items.childNodes[i].innerHTML += deletes;
-            deletes = '<input class="btn btn-warning btn-mini" type="button" value="change"></div>';
+            deletes = '<img class="iconChange">';
             items.childNodes[i].innerHTML += deletes;
         }
     }
-}
-function postRquestLogin(activeLogin) {
-    var loginInJson = "{\"lastUser\" : \""+activeLogin+"\"}";
-    post(appState.mainUrl, loginInJson, function(){
-        restore();
-    });
 }
 function buttonClick() {
     var message = document.getElementById('inputMessage').value;
@@ -138,15 +140,22 @@ function buttonClick() {
     if (!message)
         return;
     var newTask = theTask(user, message);
-    addTodo(newTask, function() {
-    //    output(appState);
-    });
+    if(numberChangeString ==-1) {
+        addTodo(newTask, function () {
+            //    output(appState);
+        });
+    }
+    else {
+        changeRequest(appState.taskList[numberChangeString], function () {
+        });
+            restore();
+    }
     document.getElementById('inputMessage').value = '';
     //storeChat(taskList);
 }
 function addTodo(task, continueWith) {
     post(appState.mainUrl, JSON.stringify(task), function(){
-        restore();
+        restore(continueWith);
     });
 }
 function addTodoInternal(task) {
@@ -170,8 +179,8 @@ function addTodoInternal(task) {
 function createItem(task) {
     var temp = document.createElement('div');
     var htmlAsText = '<div class="item border1" data-task-id="индефикатор">' +
-        '<p>Логин</p><p>Сообщение</p><input class="btn  btn-danger btn-mini" type="button" value="delete">' +
-        '<input class="btn btn-warning btn-mini" type="button" value="change"></div>';
+        '<p>Логин</p><p>Сообщение</p><img class="iconDelete">' +
+        '<img class="iconChange"></div>';
     temp.innerHTML = htmlAsText;
     updateItem(temp.firstChild, task);
     return temp.firstChild;
@@ -205,10 +214,9 @@ function deleteClick(item) {
         }
     }
 
-
+    items.removeChild(items.childNodes[i]);
+    appState.taskList.splice(i, 1);
     deleteRequest(appState.taskList[i], function() {
-        items.removeChild(items.childNodes[i]);
-        appState.taskList.splice(i, 1);
     });
     //storeChat(taskList);
 }
@@ -233,21 +241,26 @@ function deleteMessage(item) {
             break;
         }
     }
-    deleteRequest(appState.taskList[i], function() {
-        items.childNodes[numberChangeString].childNodes[1].textContent = '';
-        restore();
-    });
-
+    items.childNodes[numberChangeString].childNodes[1].textContent = '';
 }
-
+function isEnter() {
+    if (event.keyCode == 13) {
+        pickLogin();
+    }
+}
+function isShiftEnter() {
+    if (event.keyCode == 13 && event.shiftKey == false) {
+        buttonClick();
+        event.preventDefault();
+    }
+}
 function restore(continueWith) {//!!!!!!!!!!!!!!!!!!!!!!!!!!!!! после гет
     var url = appState.mainUrl + '?token=' + appState.token;
     get(url, function(responseText) {
        console.assert(responseText != null);
         var response = JSON.parse(responseText)
         appState.token = response.token;
-        appState.lastUser = response.lastUser;
-        createAllTask(response.messages, response.lastUser);
+        createAllTask(response.messages);
        // output(appState);
         continueWith && continueWith();
     });
@@ -264,9 +277,8 @@ function restore(continueWith) {//!!!!!!!!!!!!!!!!!!!!!!!!!!!!! после ге�
 }
 
 function output(value){
-    var output = document.getElementById('items');
-    var image = document.getElementById('ServerOk').outerHTML = "<img id=\"ServerOk\" src=\"css/images/redButton.png\">";
-
+    var output = document.getElementById('shellChat');
+    document.getElementsByClassName('serverPosition')[0].outerHTML = "<div class=\"serverPosition\"><h4>Server:<img src=\"css/images/redButton.png\"></h4></div>"
     output.innerText = JSON.stringify(value, null, 2);
 }
 

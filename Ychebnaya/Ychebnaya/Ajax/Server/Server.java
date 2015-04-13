@@ -15,7 +15,6 @@ import java.util.concurrent.SynchronousQueue;
 public class Server implements HttpHandler {
     Map<Integer, Message> history = new TreeMap<Integer, Message>();
     private MessageExchange messageExchange = new MessageExchange();
-    String lastUser;
     public static void main(String[] args) {
        /* if (args.length != 1) {
             System.out.println("Usage: java Server port");
@@ -65,11 +64,6 @@ public class Server implements HttpHandler {
             e.printStackTrace();
         }
 
-        try{
-            sendResponse(httpExchange, response);
-        } catch(Exception e) {
-            System.out.println("Unable to send response !");
-        }
     }
 
     private ArrayList<Message> giveArrayMessages(int index) {
@@ -91,7 +85,7 @@ public class Server implements HttpHandler {
             if (token != null && !"".equals(token)) {
                 int index = messageExchange.getIndex(token);
 
-                return messageExchange.getServerResponse(giveArrayMessages(index), history.size(), lastUser);//username,history.subList(index, history.size()));
+                return messageExchange.getServerResponse(giveArrayMessages(index), history.size());//username,history.subList(index, history.size()));
             } else {
                 return "Token query parameter is absent in url: " + query;
             }
@@ -109,9 +103,6 @@ public class Server implements HttpHandler {
                 System.out.println(id + ") " + user + " : " + message);
                 Message structOfMessage = new Message(id, user, message);
                 history.put(history.size(), structOfMessage);
-            }
-            else {
-                lastUser = jsonObject.get("lastUser").toString();
             }
         } catch (ParseException e) {
             System.err.println("Invalid user message: " + httpExchange.getRequestBody() + " " + e.getMessage());
@@ -143,7 +134,7 @@ private void doDelete(HttpExchange httpExchange) {
     private void doPut(HttpExchange httpExchange) {
         try {
             JSONObject jsonObject = messageExchange.getClientMessage(httpExchange.getRequestBody());
-            long id = Integer.parseInt(jsonObject.get("id").toString());
+            long id = Long.parseLong(jsonObject.get("id").toString());
             String message = jsonObject.get("message").toString();
             int i;
             for(i = 0; i < history.size(); i++ ) {

@@ -19,7 +19,7 @@ public class MessageExchange {
         return (Integer.valueOf(token.substring(2, token.length() - 2)) - 11) / 8;
     }
 
-    public String getServerResponse(List<Message> messages, int numberToken, String lastUser) {
+    public String getServerResponse(List<Message> messages, int numberToken) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < messages.size(); i++) {
@@ -29,7 +29,6 @@ public class MessageExchange {
             jsonObject1.put("message", messages.get(i).getMessage());
             jsonArray.add(jsonObject1);
         }
-        jsonObject.put("lastUser", lastUser);
         jsonObject.put("messages", jsonArray);
         jsonObject.put("token", getToken(numberToken));
         return jsonObject.toJSONString();
