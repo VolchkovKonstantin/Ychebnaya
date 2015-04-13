@@ -16,7 +16,7 @@ function run() {
     Container.addEventListener('click', delegateEvent);
     taskList = restoreChat();
     if (taskList == null) {
-        taskList=[];
+        taskList = [];
     }
     var login = restoreLogin();
     if (login != "") {
@@ -27,10 +27,10 @@ function run() {
     block.scrollTop = block.scrollHeight;
 }
 function delegateEvent(event) {
-    if (event.type == 'click' && (event.target.classList.contains('btn-sent')||event.target.classList.contains('btn-my'))) {
+    if (event.type == 'click' && (event.target.classList.contains('btn-sent') || event.target.classList.contains('btn-my'))) {
         buttonClick();
     }
-    if (document.getElementById('inputMessage').value != "" && numberChangeString != -1) {
+    if (document.getElementById('inputMessage').value != "" &&  numberChangeString != -1) {
         if (event.type == 'click' && event.target.classList.contains('input')) {
             //Чтобы не выдавало ошибку при нажатии на input
             return;
@@ -204,8 +204,8 @@ function isEnter() {
     }
 }
 function isShiftEnter() {
-        if (event.keyCode == 13 && event.shiftKey==false) {
-            buttonClick();
-            event.preventDefault();
-        }
+    if (event.keyCode == 13 && event.shiftKey == false) {
+        buttonClick();
+        event.preventDefault();
+    }
 }
