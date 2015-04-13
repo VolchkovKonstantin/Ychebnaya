@@ -30,9 +30,8 @@ function delegateEvent(event) {
     if (event.type == 'click' && (event.target.classList.contains('btn-sent') || event.target.classList.contains('btn-my'))) {
         buttonClick();
     }
-    if (document.getElementById('inputMessage').value != "" &&  numberChangeString != -1) {
+    if (document.getElementById('inputMessage').value != "" && numberChangeString != -1) {
         if (event.type == 'click' && event.target.classList.contains('input')) {
-            //Чтобы не выдавало ошибку при нажатии на input
             return;
         }
         alert('Please finish input');
