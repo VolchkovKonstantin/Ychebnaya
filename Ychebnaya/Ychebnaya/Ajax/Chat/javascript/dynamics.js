@@ -38,9 +38,9 @@ function run() {
      document.getElementById('nameLogin').innerHTML = login;
      }
      */
-    restore();
+    //restore();
     setInterval(function() {
-     restore();}, 20000);
+     restore();}, 5000);
 }
 function delegateEvent(event) {
     if (event.type == 'click' && (event.target.classList.contains('btn-sent') || event.target.classList.contains('btn-my'))) {
@@ -131,7 +131,7 @@ function pickLogin() {
 function buttonClick() {
     var message = document.getElementById('inputMessage').value;
     var user = document.getElementById('nameLogin').innerHTML;
- //   taskList = restoreChat();
+    //   taskList = restoreChat();
     if (user.localeCompare("") == 0) {
         alert("input Login!!!")
         return;
@@ -140,22 +140,24 @@ function buttonClick() {
     if (!message)
         return;
     var newTask = theTask(user, message);
-    if(numberChangeString ==-1) {
+    if (numberChangeString == -1) {
         addTodo(newTask, function () {
             //    output(appState);
         });
     }
     else {
+        appState.taskList[numberChangeString].message = newTask.message
         changeRequest(appState.taskList[numberChangeString], function () {
         });
-            restore();
+        addTodoInternal(newTask);
     }
+
     document.getElementById('inputMessage').value = '';
     //storeChat(taskList);
 }
 function addTodo(task, continueWith) {
     post(appState.mainUrl, JSON.stringify(task), function(){
-        restore(continueWith);
+        //restore(continueWith);
     });
 }
 function addTodoInternal(task) {
@@ -215,9 +217,9 @@ function deleteClick(item) {
     }
 
     items.removeChild(items.childNodes[i]);
-    appState.taskList.splice(i, 1);
     deleteRequest(appState.taskList[i], function() {
     });
+    appState.taskList.splice(i, 1);
     //storeChat(taskList);
 }
 function changeRequest(task, continueWith) {
