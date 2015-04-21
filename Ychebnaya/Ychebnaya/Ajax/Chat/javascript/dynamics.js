@@ -178,15 +178,17 @@ function buttonClick() {
         return;
     var newTask = theTask(user, message);
     if (numberChangeString == -1) {
+        addTodoInternal(newTask);
+        appState.taskList.push(newTask);
         addTodo(newTask, function () {
             //    output(appState);
         });
     }
     else {
-        appState.taskList[numberChangeString].message = newTask.message
-        changeRequest(appState.taskList[numberChangeString], function () {
-        });
         addTodoInternal(newTask);
+        changeRequest(appState.taskList[numberChangeString], function () {
+            numberChangeString = -1;
+        });
     }
 
     document.getElementById('inputMessage').value = '';
@@ -205,7 +207,13 @@ function addTodoInternal(task) {
     if (numberChangeString != -1) {
         items.childNodes[numberChangeString].childNodes[1].innerHTML = task.message;
         appState.taskList[numberChangeString].message = task.message;
-        numberChangeString = -1;
+    }
+    else {
+        var item = createItem(task);
+        items.appendChild(item);
+        appState.taskList.push(task);
+        var block = document.getElementsByClassName("chat");
+        block[0].scrollTop = block[0].scrollHeight;
     }
 }
 function createItem(task) {
@@ -238,18 +246,17 @@ function deleteRequest(task, continueWith) {
 }
 function deleteClick(item) {
     // taskList = restoreChat();
-    var items = document.getElementsByClassName('items')[0];
+    items = document.getElementsByClassName('items')[0];
     var id = item.attributes['data-task-id'].value;
     for (var i = 0; i < appState.taskList.length; i++) {
         if (appState.taskList[i].id == id) {
             break;
         }
     }
-
-    // items.removeChild(items.childNodes[i]);
+    items.removeChild(item);
     deleteRequest(appState.taskList[i], function () {
     });
-    // appState.taskList.splice(i, 1);
+    //appState.taskList.splice(i, 1);
     //storeChat(taskList);
 }
 function changeRequest(task, continueWith) {
@@ -258,9 +265,8 @@ function changeRequest(task, continueWith) {
     });
 }
 function changeClick(item) {
-    var b = item.childNodes[1].textContent;
-    document.getElementById('inputMessage').value = b;
-    deleteMessage(item, appState.taskList);
+    document.getElementById('inputMessage').value = item.childNodes[1].textContent;
+    deleteMessage(item);
     document.getElementById('inputMessage').focus();
 }
 function deleteMessage(item) {
@@ -274,6 +280,9 @@ function deleteMessage(item) {
         }
     }
     items.childNodes[numberChangeString].childNodes[1].textContent = '';
+    appState.taskList[numberChangeString].message = "User Change message";
+    changeRequest(appState.taskList[numberChangeString], function () {
+    });
 }
 function isEnter() {
     if (event.keyCode == 13) {
