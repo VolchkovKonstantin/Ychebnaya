@@ -68,7 +68,7 @@ public class Server implements HttpHandler {
 
     private ArrayList<Message> giveArrayMessages(int index) {
         ArrayList<Message> messages = new ArrayList<Message>();
-        for (int i = index; i < history.size(); i++) {
+        for (int i = 0; i < history.size(); i++) {
             Message mes = history.get(i);
             if (mes != null) {
                 messages.add(mes);

@@ -12,17 +12,17 @@ var theTask = function (user, message) {
     };
 };
 var appState = {
-    mainUrl : 'http://localhost:999/chat',
-    taskList:[],
-    token : 'TE11EN'
+    mainUrl: 'http://localhost:999/chat',
+    taskList: [],
+    token: 'TE11EN'
 };
 /*var Users = function (id,user){
-    return {
-        id: id,
-        user: user
-    }
-};
-*/
+ return {
+ id: id,
+ user: user
+ }
+ };
+ */
 function run() {
     var Container = document.getElementsByClassName('container')[0];
     Container.addEventListener('click', delegateEvent);
@@ -39,8 +39,9 @@ function run() {
      }
      */
     //restore();
-    setInterval(function() {
-     restore();}, 5000);
+    setInterval(function () {
+        restore();
+    }, 5000);
 }
 function delegateEvent(event) {
     if (event.type == 'click' && (event.target.classList.contains('btn-sent') || event.target.classList.contains('btn-my'))) {
@@ -66,46 +67,82 @@ function delegateEvent(event) {
         }
     }
 }
-function createAllTask(allTask) {
-    for (var i = 0; i < allTask.length; i++)
-        addTodoInternal(allTask[i]);
-}
-/*function storeChat(listToSave) {
-    if (typeof(Storage) == "undefined") {
-        alert('localStorage is not accessible');
-        return;
+function createAllTask(allTask, fromIndex) {
+    var index = fromIndex;
+    var size = allTask.length;
+    for (var i = 0; i < size; i++) {
+        if (addFromIndex(allTask[i], index))
+            index++;
     }
-    localStorage.setItem("Chat", JSON.stringify(listToSave));
-}
-function storeLogin(saveLogin) {
-    if (typeof(Storage) == "undefined") {
-        alert('localStorage is not accessible');
-        return;
-    }
-    localStorage.setItem("Login", JSON.stringify(savelogin));
-}
-function restoreChat() {
-    if (typeof(Storage) == "undefined") {
-        alert('localStorage is not accessible');
-        return;
-    }
-    var item = localStorage.getItem("Chat");
-    return item && JSON.parse(item);
+    var block = document.getElementsByClassName("chat");
+    block[0].scrollTop = block[0].scrollHeight;
 }
 
-function restoreLogin() {
-    if (typeof(Storage) == "undefined") {
-        alert('localStorage is not accessible');
-        return;
+function addFromIndex(task, fromIndex) {
+    var items = document.getElementsByClassName('items')[0];
+    var bool = true;
+    if (items.childElementCount <= fromIndex) {
+        if (task.message == "") {
+            // appState.taskList[fromIndex] = task;
+            return;
+        }
+        else {
+            var item = createItem(task);
+            items.appendChild(item);
+            appState.taskList[fromIndex] = task;
+        }
     }
-    var item = localStorage.getItem("Login");
-    return item && JSON.parse(item);
+    else {
+        if (task.message == "") {
+            items.removeChild(items.childNodes[fromIndex]);
+            appState.taskList.splice(fromIndex, 1);
+            bool = false;
+            return;
+        }
+        else {
+            var item = createItem(task);
+            items.replaceChild(item, items.childNodes[fromIndex]);
+            appState.taskList[fromIndex] = task;
+        }
+    }
+    return bool;
 }
-*/
+/*function storeChat(listToSave) {
+ if (typeof(Storage) == "undefined") {
+ alert('localStorage is not accessible');
+ return;
+ }
+ localStorage.setItem("Chat", JSON.stringify(listToSave));
+ }
+ function storeLogin(saveLogin) {
+ if (typeof(Storage) == "undefined") {
+ alert('localStorage is not accessible');
+ return;
+ }
+ localStorage.setItem("Login", JSON.stringify(savelogin));
+ }
+ function restoreChat() {
+ if (typeof(Storage) == "undefined") {
+ alert('localStorage is not accessible');
+ return;
+ }
+ var item = localStorage.getItem("Chat");
+ return item && JSON.parse(item);
+ }
+
+ function restoreLogin() {
+ if (typeof(Storage) == "undefined") {
+ alert('localStorage is not accessible');
+ return;
+ }
+ var item = localStorage.getItem("Login");
+ return item && JSON.parse(item);
+ }
+ */
 function pickLogin() {
     var login = document.getElementById('inputLogin');
     document.getElementById('nameLogin').innerHTML = login.value;
-   // postRquestLogin(login.value);
+    // postRquestLogin(login.value);
     //storeLogin(login.value);
     login.value = '';
     var items = document.getElementsByClassName('items') [0];
@@ -156,7 +193,7 @@ function buttonClick() {
     //storeChat(taskList);
 }
 function addTodo(task, continueWith) {
-    post(appState.mainUrl, JSON.stringify(task), function(){
+    post(appState.mainUrl, JSON.stringify(task), function () {
         //restore(continueWith);
     });
 }
@@ -164,18 +201,11 @@ function addTodoInternal(task) {
     if (task.message == "") {
         return;
     }
-    var item = createItem(task);
     var items = document.getElementsByClassName('items')[0];
     if (numberChangeString != -1) {
         items.childNodes[numberChangeString].childNodes[1].innerHTML = task.message;
         appState.taskList[numberChangeString].message = task.message;
         numberChangeString = -1;
-    }
-    else {
-        appState.taskList.push(task);
-        items.appendChild(item);
-        var block = document.getElementsByClassName("chat");
-        block[0].scrollTop = block[0].scrollHeight;
     }
 }
 function createItem(task) {
@@ -202,12 +232,12 @@ function updateItem(divItem, task) {
     }
 }
 function deleteRequest(task, continueWith) {
-    deletes(appState.mainUrl + '?id=' + task.id, JSON.stringify(task), function() {
+    deletes(appState.mainUrl + '?id=' + task.id, JSON.stringify(task), function () {
         continueWith();
     });
 }
 function deleteClick(item) {
-   // taskList = restoreChat();
+    // taskList = restoreChat();
     var items = document.getElementsByClassName('items')[0];
     var id = item.attributes['data-task-id'].value;
     for (var i = 0; i < appState.taskList.length; i++) {
@@ -216,14 +246,14 @@ function deleteClick(item) {
         }
     }
 
-    items.removeChild(items.childNodes[i]);
-    deleteRequest(appState.taskList[i], function() {
+    // items.removeChild(items.childNodes[i]);
+    deleteRequest(appState.taskList[i], function () {
     });
-    appState.taskList.splice(i, 1);
+    // appState.taskList.splice(i, 1);
     //storeChat(taskList);
 }
 function changeRequest(task, continueWith) {
-    put(appState.mainUrl + '?id=' + task.id, JSON.stringify(task), function() {
+    put(appState.mainUrl + '?id=' + task.id, JSON.stringify(task), function () {
         continueWith();
     });
 }
@@ -258,27 +288,27 @@ function isShiftEnter() {
 }
 function restore(continueWith) {//!!!!!!!!!!!!!!!!!!!!!!!!!!!!! после гет
     var url = appState.mainUrl + '?token=' + appState.token;
-    get(url, function(responseText) {
-       console.assert(responseText != null);
+    get(url, function (responseText) {
+        console.assert(responseText != null);
         var response = JSON.parse(responseText)
         appState.token = response.token;
-        createAllTask(response.messages);
-       // output(appState);
+        createAllTask(response.messages, 0);
+        // output(appState);
         continueWith && continueWith();
     });
 
-  /*  allTask = restoreChat();
-    taskList = restoreChat();
-    var login = restoreLogin();
-    if (login != "") {
-        document.getElementById('nameLogin').innerHTML = login;
-        document.getElementById('onlineUser').innerHTML = login;
-    }
-    createAllTask(allTask, taskList);
-    */
+    /*  allTask = restoreChat();
+     taskList = restoreChat();
+     var login = restoreLogin();
+     if (login != "") {
+     document.getElementById('nameLogin').innerHTML = login;
+     document.getElementById('onlineUser').innerHTML = login;
+     }
+     createAllTask(allTask, taskList);
+     */
 }
 
-function output(value){
+function output(value) {
     var output = document.getElementById('shellChat');
     document.getElementsByClassName('serverPosition')[0].outerHTML = "<div class=\"serverPosition\"><h4>Server:<img src=\"css/images/redButton.png\"></h4></div>"
     output.innerText = JSON.stringify(value, null, 2);
@@ -307,12 +337,12 @@ function deletes(url, data, continueWith, continueWithError) {
 }
 
 function isError(text) {
-    if(text == "")
+    if (text == "")
         return false;
 
     try {
         var obj = JSON.parse(text);
-    } catch(ex) {
+    } catch (ex) {
         return true;
     }
 
@@ -329,12 +359,12 @@ function ajax(method, url, data, continueWith, continueWithError) {
         if (xhr.readyState !== 4)
             return;
 
-        if(xhr.status != 200) {
+        if (xhr.status != 200) {
             continueWithError('Error on the server side, response ' + xhr.status);
             return;
         }
 
-        if(isError(xhr.responseText)) {
+        if (isError(xhr.responseText)) {
             continueWithError('Error on the server side, response ' + xhr.responseText);
             return;
         }
@@ -347,10 +377,10 @@ function ajax(method, url, data, continueWith, continueWithError) {
     }
 
     xhr.onerror = function (e) {
-        var errMsg = 'Server connection error !\n'+
+        var errMsg = 'Server connection error !\n' +
             '\n' +
-            'Check if \n'+
-            '- server is active\n'+
+            'Check if \n' +
+            '- server is active\n' +
             '- server sends header "Access-Control-Allow-Origin:*"';
 
         continueWithError(errMsg);
@@ -359,6 +389,6 @@ function ajax(method, url, data, continueWith, continueWithError) {
     xhr.send(data);
 }
 //!!!!!!!!!!!!!->
-window.onerror = function(err) {
-   output(err.toString());
+window.onerror = function (err) {
+    output(err.toString());
 }
